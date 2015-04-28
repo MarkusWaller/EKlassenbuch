@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome">Willkommen</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="button_logout">Abmelden</string>
+    <string name="Nachname">Name</string>
+</resources>
