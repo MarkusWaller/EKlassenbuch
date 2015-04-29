@@ -1,8 +1,8 @@
 <?php
  
 /*
- * Following code will get single student details
- * A student is identified by student_id (student_id)
+ * Following code will get single teacher details
+ * A teacher is identified by teacher_id (teacher_id)
  */
  
 // array for JSON response
@@ -18,8 +18,8 @@ $db = new DB_CONNECT();
 if (isset($_POST["email"])) {
     $email = $_POST['email'];
  
-    // get a student from student table
-    $result = mysql_query("SELECT * FROM student WHERE email = '$email'");
+    // get a teacher from teacher table
+    $result = mysql_query("SELECT * FROM teacher WHERE email = '$email'");
  
     if (!empty($result)) {
         // check for empty result
@@ -27,37 +27,35 @@ if (isset($_POST["email"])) {
  
             $result = mysql_fetch_array($result);
  
-            $student = array();
-            $student["student_id"] = $result["student_id"];
-			$student["first_name"] = $result["first_name"];
-            $student["last_name"] = $result["last_name"];
-            $student["class"] = $result["class"];
-			$student["birth_date"] = $result["birth_date"];
-			$student["email"] = $result["email"];
-			$student["password"] = $result["password"];
+            $teacher = array();
+            $teacher["teacher_id"] = $result["teacher_id"];
+			$teacher["first_name"] = $result["first_name"];
+            $teacher["last_name"] = $result["last_name"];
+			$teacher["email"] = $result["email"];
+			$teacher["password"] = $result["password"];
 			
             // success
             $response["success"] = 1;
  
             // user node
-            $response["student"] = array();
+            $response["teacher"] = array();
  
-            array_push($response["student"], $student);
+            array_push($response["teacher"], $teacher);
  
             // echoing JSON response
             echo json_encode($response);
         } else {
-            // no student found
+            // no teacher found
             $response["success"] = 0;
-            $response["message"] = "Kein Schüler oder noch nicht registriert.";
+            $response["message"] = "Kein Lehrer oder noch nicht registriert.";
  
             // echo no users JSON
             echo json_encode($response);
         }
     } else {
-        // no student found
+        // no teacher found
         $response["success"] = 0;
-        $response["message"] = "Kein Schüler oder noch nicht registriert.";
+        $response["message"] = "Kein Lehrer oder noch nicht registriert.";
  
         // echo no users JSON
         echo json_encode($response);

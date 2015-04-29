@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ import de.sap_project.e_klassenbuch.db.SessionManager;
 
 /**
  * Login User Activity
- *
+ * <p/>
  * Created by Markus on 24.04.2015.
  */
 public class LoginActivity extends Activity {
@@ -38,7 +39,7 @@ public class LoginActivity extends Activity {
     private EditText inputPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
-    //private SQLiteHandler db;
+    private boolean isTeacher = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,25 +98,37 @@ public class LoginActivity extends Activity {
         });
     }
 
+    public void onCheckboxClicked(View view) {
+        // Ist die Checkbox angekreuzt
+        boolean checked = ((CheckBox) view).isChecked();
+
+        isTeacher = checked;
+    }
+
     /**
      * function to verify login details in mysql db
-     *
      */
     private void checkLogin(final String email, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
-        pDialog.setMessage("Logging in ...");
+        pDialog.setMessage("Login läuft ...");
         showDialog();
 
+        String url = AppConfig.URL_STUDENT_LOGIN;
+
+            if (isTeacher){
+            url = AppConfig.URL_TEACHER_LOGIN;
+        }
+
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_STUDENT_LOGIN, new Response.Listener<String>() {
+                url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response);
                 hideDialog();
-
+                String db_password = "";
                 try {
                     JSONObject jObj = new JSONObject(response);
                     int success = jObj.getInt("success");
@@ -123,21 +136,37 @@ public class LoginActivity extends Activity {
                     // Check for error node in json
                     if (success == 1) {
                         // user successfully logged in
+                        if (isTeacher){
+                            JSONArray user = jObj.getJSONArray("teacher");
+                            String db_teacher_id = user.getJSONObject(0).getString("teacher_id");
+                            String db_first_name = user.getJSONObject(0).getString("first_name");
+                            String db_last_name = user.getJSONObject(0).getString("last_name");
+                            String db_email = user.getJSONObject(0).getString("email");
+                           db_password = user.getJSONObject(0).getString("password");
+                        }else {
 
-                        JSONArray user = jObj.getJSONArray("student");
-                        String first_name = user.getJSONObject(0).getString("first_name");
-                        String last_name = user.getJSONObject(0).getString("last_name");
-                        String email = user.getJSONObject(0).getString("email");
-                        String birth_date = user.getJSONObject(0).getString("birth_date");
-                        String password = user.getJSONObject(0).getString("password");
+                            JSONArray user = jObj.getJSONArray("student");
+                            String db_student_id = user.getJSONObject(0).getString("student_id");
+                            String db_first_name = user.getJSONObject(0).getString("first_name");
+                            String db_last_name = user.getJSONObject(0).getString("last_name");
+                            String db_class = user.getJSONObject(0).getString("class");
+                            String db_email = user.getJSONObject(0).getString("email");
+                            String db_birth_date = user.getJSONObject(0).getString("birth_date");
+                            db_password = user.getJSONObject(0).getString("password");
+                        }
+                        if (password.equals(db_password)){
+                            // Create login session
+                            session.setLogin(true);
 
-                        // Create login session
-                        session.setLogin(true);
+                            // Launch main activity
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.error_email_password), Toast.LENGTH_LONG).show();
+                        }
 
-                        // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("message");

@@ -17,7 +17,6 @@ if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['c
 	$birth_date = $_POST['birth_date'];
     $email = $_POST['email'];
 	$password = $_POST['password'];
-	
  
     // include db connect class
     require_once __DIR__ . '/../db_connect.php';

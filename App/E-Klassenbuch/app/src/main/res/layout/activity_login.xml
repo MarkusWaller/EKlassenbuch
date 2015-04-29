@@ -14,6 +14,13 @@
         <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:orientation="vertical">
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/teacher_checkbox"
+                android:id="@+id/checkBox"
+                android:onClick="onCheckboxClicked"/>
+
             <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress" android:maxLines="1"
@@ -37,6 +44,7 @@
                 android:text="@string/button_reg"
                 android:id="@+id/button_link_to_register"
                 android:layout_gravity="center_horizontal" />
+
 
         </LinearLayout>
     </ScrollView>

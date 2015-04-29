@@ -5,6 +5,8 @@
     <string name="reg_first_name">Vorname</string>
     <string name="reg_password">Password</string>
     <string name="reg_date">Geburtsdatum</string>
+    <string name="reg_class">Klasse</string>
     <string name="button_register">Registrieren</string>
     <string name="button_link_to_login">Zur Anmeldung</string>
+    <string name="reg_teacher_checkbox">Als Lehrer registrieren</string>
 </resources>
