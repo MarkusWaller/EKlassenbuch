@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
+ * Application configuration variables
+ * <p/>
  * Created by Markus on 24.04.2015.
  */
 public class AppConfig {

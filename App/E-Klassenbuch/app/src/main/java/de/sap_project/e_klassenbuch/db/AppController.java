@@ -7,10 +7,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 /**
+ * http request to URLs
+ * <p/>
  * Created by Markus on 24.04.2015.
  */
 public class AppController extends Application {

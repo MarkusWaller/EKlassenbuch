@@ -3,7 +3,9 @@ package de.sap_project.e_klassenbuch.data;
 import java.util.Date;
 
 /**
- * Created by Matthias on 01.05.2015.
+ * User data object
+ * <p/>
+ * Created by Markus on 01.05.2015.
  */
 public class User {
     private String firstName;
@@ -15,7 +17,7 @@ public class User {
     private Date birthDate;
     private Boolean isTeacher;
 
-    public User(Integer id, String firstName, String lastName, String email, String password, Boolean isTeacher, String className, Date birthDate ) {
+    public User(Integer id, String firstName, String lastName, String email, String password, Boolean isTeacher, String className, Date birthDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -164,7 +164,7 @@ public class LoginActivity extends ActionBarActivity {
                         if (passwordHash.equals(db_password)) {
                             // Create login session
                             session.setLogin(true);
-                            session.setUser(new User(db_id,db_first_name, db_last_name, db_email, db_password, isTeacher, db_class, db_birth_date ));
+                            session.setUser(new User(db_id, db_first_name, db_last_name, db_email, db_password, isTeacher, db_class, db_birth_date));
 
                             // Launch main activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

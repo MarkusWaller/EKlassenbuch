@@ -10,6 +10,8 @@ import java.text.ParseException;
 import de.sap_project.e_klassenbuch.data.User;
 
 /**
+ * notice the last login user
+ * <p/>
  * Created by Markus on 24.04.2015.
  */
 public class SessionManager {

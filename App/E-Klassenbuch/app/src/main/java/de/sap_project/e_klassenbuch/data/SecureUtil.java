@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
+ * Security Utility
+ * <p/>
  * Created by Markus on 03.05.2015.
  */
 
@@ -22,7 +24,7 @@ public class SecureUtil {
     }
 
     public String getPasswordHash(String password) {
-         String passwordHash = "";
+        String passwordHash = "";
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(password.getBytes());
@@ -33,11 +35,11 @@ public class SecureUtil {
         }
         return passwordHash;
     }
+
     /**
      * Encodes the 128 bit (16 bytes) MD5 into a 32 character String.
      *
      * @param binaryData Array containing the digest
-     *
      * @return Encoded MD5, or null if encoding failed
      */
     public String encode(byte[] binaryData) {
@@ -47,11 +49,11 @@ public class SecureUtil {
 
         char[] buffer = new char[32];
 
-        for (int i=0; i<16; i++) {
+        for (int i = 0; i < 16; i++) {
             int low = binaryData[i] & 0x0f;
             int high = (binaryData[i] & 0xf0) >> 4;
-            buffer[i*2] = hexadecimal[high];
-            buffer[i*2 + 1] = hexadecimal[low];
+            buffer[i * 2] = hexadecimal[high];
+            buffer[i * 2 + 1] = hexadecimal[low];
         }
 
         return new String(buffer);
