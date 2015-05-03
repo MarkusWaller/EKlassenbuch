@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">E-Klassenbuch</string>
-    <string name="title_activity_regristrierung">Registrierung</string>
+    <string name="title_activity_regristrierung">E-Klassenbuch - Registrierung</string>
+    <string name="title_activity_login">E-Klassenbuch - Login</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="Vorname">Name</string>

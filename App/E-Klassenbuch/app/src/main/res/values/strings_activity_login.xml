@@ -11,6 +11,6 @@
     <string name="error_incorrect_password">Das Passwort ist falsch</string>
     <string name="error_field_required">Dieses Feld muss eingegeben werden</string>
     <string name="button_reg">Zur Registrierung</string>
-    <string name="teacher_checkbox">Als Lehrer Anmelden</string>
+    <string name="teacher_checkbox">Als Lehrer anmelden</string>
     <string name="error_email_password">E-mail oder Passwort nicht korrekt</string>
 </resources>

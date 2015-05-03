@@ -19,7 +19,7 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/teacher_checkbox"
+                android:text="@string/reg_teacher_checkbox"
                 android:id="@+id/checkBox2"
                 android:layout_gravity="center_horizontal"
                 android:onClick="onRegCheckboxClicked"

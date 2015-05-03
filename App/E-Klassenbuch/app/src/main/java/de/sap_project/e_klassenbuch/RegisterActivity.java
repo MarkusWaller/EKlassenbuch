@@ -31,7 +31,7 @@ import de.sap_project.e_klassenbuch.db.AppController;
 
 /**
  * Register Activity
- *
+ * <p/>
  * Created by Markus
  */
 public class RegisterActivity extends ActionBarActivity {
@@ -102,10 +102,10 @@ public class RegisterActivity extends ActionBarActivity {
         // Ist die Checkbox angekreuzt
         isTeacher = ((CheckBox) view).isChecked();
 
-        if (isTeacher){
+        if (isTeacher) {
             regDate.setVisibility(View.INVISIBLE);
             regClass.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             regDate.setVisibility(View.VISIBLE);
             regClass.setVisibility(View.VISIBLE);
         }
@@ -187,27 +187,27 @@ public class RegisterActivity extends ActionBarActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_regristrierung, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_regristrierung, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void showDialog() {
         if (!pDialog.isShowing())
