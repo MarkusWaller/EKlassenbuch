@@ -2,8 +2,8 @@ package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,19 +18,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.sap_project.e_klassenbuch.data.SecureUtil;
 import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 
 /**
  * Register Activity
- * <p/>
+ *
  * Created by Markus
  */
 public class RegisterActivity extends ActionBarActivity {
@@ -99,9 +100,7 @@ public class RegisterActivity extends ActionBarActivity {
 
     public void onRegCheckboxClicked(View view) {
         // Ist die Checkbox angekreuzt
-        boolean checked = ((CheckBox) view).isChecked();
-
-        isTeacher = checked;
+        isTeacher = ((CheckBox) view).isChecked();
 
         if (isTeacher){
             regDate.setVisibility(View.INVISIBLE);
@@ -167,6 +166,7 @@ public class RegisterActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
                 hideDialog();
+
             }
         }) {
             @Override
@@ -174,7 +174,7 @@ public class RegisterActivity extends ActionBarActivity {
                 // Posting parameters to registration url
                 Map<String, String> params = new HashMap<>();
                 params.put("email", email);
-                params.put("password", password);
+                params.put("password", SecureUtil.getInstance().getPasswordHash(password));
                 params.put("first_name", first_name);
                 params.put("last_name", last_name);
                 params.put("birth_date", date);

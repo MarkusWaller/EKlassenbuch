@@ -9,11 +9,13 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
+import de.sap_project.e_klassenbuch.data.User;
+import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.SessionManager;
 
 /**
  * Main Activity
- *
+ * <p/>
  * Created by Markus
  */
 public class MainActivity extends Activity {
@@ -24,28 +26,29 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        TextView txtTeacher = (TextView) findViewById(R.id.textViewIsTeacher);
         TextView txtName = (TextView) findViewById(R.id.textViewName);
         TextView txtEmail = (TextView) findViewById(R.id.textViewEmail);
+        TextView txtDate = (TextView) findViewById(R.id.textViewDate);
         Button btnLogout = (Button) findViewById(R.id.button);
 
         // session manager
-        session = new SessionManager(getApplicationContext());
+        session = SessionManager.getInstance();
 
         if (!session.isLoggedIn()) {
             logoutUser();
         }
 
-        // Fetching user details from ?
-        //HashMap<String, String> user = db.getUserDetails();
-
-        //String name = user.get("name");
-        //String email = user.get("email");
+        // Fetching user details from SessionManager
+        User user = session.getUser();
 
         // Displaying the user details on the screen
-        //txtName.setText(name);
-        //txtEmail.setText(email);
-
+        txtTeacher.setText((user.getIsTeacher()) ? "Lehrer" : "Schüler");
+        txtName.setText(user.getFirstName() + " " + user.getLastName());
+        txtEmail.setText(user.getEmail());
+        if (null != user.getBirthDate()) {
+            txtDate.setText(AppConfig.formatter.format(user.getBirthDate()));
+        }
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
 
@@ -59,11 +62,9 @@ public class MainActivity extends Activity {
     /**
      * Logging out the user. Will set isLoggedIn flag to false in shared
      * preferences Clears the user data from sqlite users table
-     * */
+     */
     private void logoutUser() {
         session.setLogin(false);
-
-        //db.deleteUsers();
 
         // Launching the login activity
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);

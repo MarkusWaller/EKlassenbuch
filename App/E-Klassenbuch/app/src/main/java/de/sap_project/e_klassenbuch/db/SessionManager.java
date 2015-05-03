@@ -5,45 +5,93 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
+import java.text.ParseException;
+
+import de.sap_project.e_klassenbuch.data.User;
+
 /**
  * Created by Markus on 24.04.2015.
  */
 public class SessionManager {
-        // LogCat tag
-        private static String TAG = SessionManager.class.getSimpleName();
+    // LogCat tag
+    private static String TAG = SessionManager.class.getSimpleName();
 
-        // Shared Preferences
-        SharedPreferences pref;
+    // Singleton pattern
+    private static final SessionManager SESSION_MANAGER = new SessionManager();
 
-        Editor editor;
-        Context _context;
+    // Shared Preferences
+    SharedPreferences pref;
 
-        // Shared pref mode
-        int PRIVATE_MODE = 0;
+    Editor editor;
+    Context _context;
+    private User user;
 
-        // Shared preferences file name
-        private static final String PREF_NAME = "AndroidHiveLogin";
+    // Shared pref mode
+    int PRIVATE_MODE = 0;
 
-        private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
+    // Shared preferences file name
+    private static final String PREF_NAME = "AndroidHiveLogin";
 
-        public SessionManager(Context context) {
-            this._context = context;
-            pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
-            editor = pref.edit();
+    private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
+
+    private SessionManager() {
+        Log.d(TAG, "SessionManager created as Singleton ...");
+        this._context = AppController.getInstance().getApplicationContext();
+        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        editor = pref.edit();
+    }
+
+    public static SessionManager getInstance() {
+        return SESSION_MANAGER;
+    }
+
+    public void setLogin(boolean isLoggedIn) {
+
+        editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
+
+        // commit changes
+        editor.commit();
+
+        Log.d(TAG, "User login session modified!");
+    }
+
+    public boolean isLoggedIn() {
+        return pref.getBoolean(KEY_IS_LOGGEDIN, false);
+    }
+
+    public User getUser() {
+        if (user == null) {
+            try {
+                user = new User(pref.getInt("UserId", 0), pref.getString("UserFirstName", "UserFirstName"),
+                        pref.getString("UserLastName", "UserLastName"),
+                        pref.getString("UserEmail", "UserEmail"),
+                        pref.getString("UserPassword", "UserPassword"),
+                        pref.getBoolean("UserIsTeacher", false),
+                        pref.getString("UserClass", "UserClass"),
+                        AppConfig.formatter.parse(pref.getString("UserBirthDate", "0000-00-00"))
+                );
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
+        return user;
+    }
 
-        public void setLogin(boolean isLoggedIn) {
+    public void setUser(User user) {
+        this.user = user;
 
-            editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
-
-            // commit changes
-            editor.commit();
-
-            Log.d(TAG, "User login session modified!");
+        //save User in Preferences
+        editor.putInt("UserId", user.getId());
+        editor.putString("UserFirstName", user.getFirstName());
+        editor.putString("UserLastName", user.getLastName());
+        editor.putString("UserPassword", user.getPassword());
+        editor.putString("UserEmail", user.getEmail());
+        editor.putBoolean("UserIsTeacher", user.getIsTeacher());
+        editor.putString("UserClass", user.getClassName());
+        if (null != user.getBirthDate()) {
+            editor.putString("UserBirthDate", AppConfig.formatter.format(user.getBirthDate()));
         }
-
-        public boolean isLoggedIn(){
-            return pref.getBoolean(KEY_IS_LOGGEDIN, false);
-        }
-
+        // commit changes
+        editor.commit();
+    }
 }

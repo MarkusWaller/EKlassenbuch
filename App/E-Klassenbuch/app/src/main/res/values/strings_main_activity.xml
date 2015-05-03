@@ -5,4 +5,6 @@
     <string name="email">Email</string>
     <string name="button_logout">Abmelden</string>
     <string name="Nachname">Name</string>
+    <string name="main_date"></string>
+    <string name="main_isTeacher"></string>
 </resources>
