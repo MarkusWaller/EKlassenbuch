@@ -9,11 +9,12 @@
 $response = array();
  
 // check for required fields
-if (isset($_POST['date']) && isset($_POST['subject']) && isset($_POST['teacher']) && isset($_POST['info'])) {
+if (isset($_POST['date']) && isset($_POST['subject']) && isset($_POST['teacher']) && isset($_POST['class']) && isset($_POST['info'])) {
  
     $date = $_POST['date'];
 	$subject = $_POST['subject'];
     $teacher = $_POST['teacher'];
+	$class = $_POST['class'];
 	$info = $_POST['info'];
 
  

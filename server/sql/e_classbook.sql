@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `book` (
   `date` date NOT NULL,
   `subject` varchar(32) NOT NULL,
   `teacher` int(11) NOT NULL,
+  `class` varchar(16) NOT NULL,
   `info` text NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 

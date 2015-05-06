@@ -9,5 +9,6 @@
     <string name="Vorname">Name</string>
     <string name="title_activity_student_profile">Student_profile</string>
     <string name="login_running">Login läuft ...</string>
+    <string name="title_activity_teacher_class">E-Klassenbuch - Lehrer</string>
 
 </resources>

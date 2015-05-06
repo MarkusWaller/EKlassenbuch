@@ -7,4 +7,5 @@
     <string name="Nachname">Name</string>
     <string name="main_date"></string>
     <string name="main_isTeacher"></string>
+    <string name="button_teacher_class">Klassen</string>
 </resources>

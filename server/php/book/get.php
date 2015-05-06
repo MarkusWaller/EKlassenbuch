@@ -32,6 +32,7 @@ if (isset($_GET["book_id"])) {
 			$book["date"] = $result["date"];
             $book["subject"] = $result["subject"];
             $book["teacher"] = $result["teacher"];
+			$book["class"] = $result["class"];
 			$book["info"] = $result["info"];
 
  

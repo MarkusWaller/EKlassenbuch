@@ -20,6 +20,9 @@ public class AppConfig {
     public static String URL_STUDENT_REGISTER = URL_PRAEFIX + "/student/create.php";
     public static String URL_TEACHER_REGISTER = URL_PRAEFIX + "/teacher/create.php";
 
+    public static String URL_CLASS_GET_ALL = URL_PRAEFIX + "/class/get_all.php";
+    public static String URL_BOOK_GET_ALL = URL_PRAEFIX + "/book/get_all.php";
+
     // Date Format for Database
     public static final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 

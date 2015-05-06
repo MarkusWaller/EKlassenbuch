@@ -28,7 +28,8 @@ public class MainActivity extends ActionBarActivity {
         TextView txtName = (TextView) findViewById(R.id.textViewName);
         TextView txtEmail = (TextView) findViewById(R.id.textViewEmail);
         TextView txtDate = (TextView) findViewById(R.id.textViewDate);
-        Button btnLogout = (Button) findViewById(R.id.button);
+        Button btnTeacherClass = (Button) findViewById(R.id.buttonTeacherClass);
+        Button btnLogout = (Button) findViewById(R.id.buttonLogOut);
 
         // session manager
         session = SessionManager.getInstance();
@@ -47,6 +48,24 @@ public class MainActivity extends ActionBarActivity {
         if (null != user.getBirthDate()) {
             txtDate.setText(AppConfig.formatter.format(user.getBirthDate()));
         }
+
+        if(user.getIsTeacher()){
+            btnTeacherClass.setVisibility(View.VISIBLE);
+        }else{
+            btnTeacherClass.setVisibility(View.INVISIBLE);
+        }
+
+        // Teacher Class button click event
+        btnTeacherClass.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), TeacherClass.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
 

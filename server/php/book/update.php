@@ -10,13 +10,14 @@
 $response = array();
  
 // check for required fields
-if (isset($_POST['book_id']) && isset($_POST['date']) && isset ($_POST['subject']) && isset($_POST['teacher']) && isset ($_POST['info'])) {
+if (isset($_POST['book_id']) && isset($_POST['date']) && isset ($_POST['subject']) && isset($_POST['teacher']) && isset($_POST['class']) && isset ($_POST['info'])) {
  
     $book_id = $_POST['book_id'];
     $date = $_POST['date'];
-	 $subject = $_POST['subject'];
+	$subject = $_POST['subject'];
     $teacher = $_POST['teacher'];
-	 $info = $_POST['info'];
+	$class = $_POST['class'];
+	$info = $_POST['info'];
 
 
 
@@ -28,7 +29,7 @@ if (isset($_POST['book_id']) && isset($_POST['date']) && isset ($_POST['subject'
     $db = new DB_CONNECT();
  
     // mysql update row with matched pid
-    $result = mysql_query("UPDATE book SET date = '$date', subject = '$subject', teacher = '$teacher', info = '$info'  WHERE book_id = $book_id");
+    $result = mysql_query("UPDATE book SET date = '$date', subject = '$subject', teacher = '$teacher', class = '$class', info = '$info'  WHERE book_id = $book_id");
  
     // check if row inserted or not
     if ($result) {

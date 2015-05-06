@@ -30,6 +30,7 @@ if (mysql_num_rows($result) > 0) {
         $book["date"] = $row["date"];
 		$book["subject"] = $row["subject"];
         $book["teacher"] = $row["teacher"];
+		$book["class"] = $row["class"];
 		$book["info"] = $row["info"];
       
  

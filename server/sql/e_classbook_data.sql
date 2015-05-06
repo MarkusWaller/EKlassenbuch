@@ -24,8 +24,8 @@ SET time_zone = "+00:00";
 -- Daten für Tabelle `book`
 --
 
-INSERT INTO `book` (`book_id`, `date`, `subject`, `teacher`, `info`) VALUES
-(1, '2015-04-22', 'IT', 1, 'Klassenarbeit geschrieben');
+INSERT INTO `book` (`book_id`, `date`, `subject`, `teacher`,`class`, `info`) VALUES
+(1, '2015-04-22', 'IT', 1, 'TGQ1c', 'Klassenarbeit geschrieben');
 
 --
 -- Daten für Tabelle `class`
