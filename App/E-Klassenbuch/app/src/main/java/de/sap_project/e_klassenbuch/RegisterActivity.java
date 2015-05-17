@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,7 +33,7 @@ import de.sap_project.e_klassenbuch.db.AppController;
  * <p/>
  * Created by Markus
  */
-public class RegisterActivity extends ActionBarActivity {
+public class RegisterActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private EditText regEmail;
@@ -41,7 +43,7 @@ public class RegisterActivity extends ActionBarActivity {
     private EditText regDate;
     private EditText regClass;
     private ProgressDialog pDialog;
-    private boolean isTeacher = false;
+    private String url = AppConfig.URL_STUDENT_REGISTER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,12 @@ public class RegisterActivity extends ActionBarActivity {
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
+
+        Spinner regSpinner = (Spinner) findViewById((R.id.spinner));
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_array, R.layout.simple_listview);
+        adapter.setDropDownViewResource(R.layout.simple_listview);
+        regSpinner.setAdapter(adapter);
+        regSpinner.setOnItemSelectedListener(this);
 
         regEmail = (EditText) findViewById(R.id.reg_email);
         regFirst = (EditText) findViewById(R.id.reg_first_name);
@@ -95,19 +103,6 @@ public class RegisterActivity extends ActionBarActivity {
         });
     }
 
-    public void onRegCheckboxClicked(View view) {
-        // Ist die Checkbox angekreuzt
-        isTeacher = ((CheckBox) view).isChecked();
-
-        if (isTeacher) {
-            regDate.setVisibility(View.INVISIBLE);
-            regClass.setVisibility(View.INVISIBLE);
-        } else {
-            regDate.setVisibility(View.VISIBLE);
-            regClass.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void register(final String email, final String password, final String first_name,
                           final String last_name, final String date, final String class_name) {
         // Tag used to cancel the request
@@ -115,12 +110,6 @@ public class RegisterActivity extends ActionBarActivity {
 
         pDialog.setMessage("Registrierung läuft ...");
         showDialog();
-
-        String url = AppConfig.URL_STUDENT_REGISTER;
-
-        if (isTeacher) {
-            url = AppConfig.URL_TEACHER_REGISTER;
-        }
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
@@ -214,5 +203,36 @@ public class RegisterActivity extends ActionBarActivity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Object item = parent.getItemAtPosition(position);
+
+        if (item instanceof String) {
+            String s = (String) item;
+            switch (s) {
+                case "Schüler":
+                    url = AppConfig.URL_STUDENT_REGISTER;
+                    regDate.setVisibility(View.VISIBLE);
+                    regClass.setVisibility(View.VISIBLE);
+                    break;
+                case "Lehrer":
+                    url = AppConfig.URL_TEACHER_REGISTER;
+                    regDate.setVisibility(View.INVISIBLE);
+                    regClass.setVisibility(View.INVISIBLE);
+                    break;
+                case "Admin":
+                    url = AppConfig.URL_ADMIN_REGISTER;
+                    regDate.setVisibility(View.INVISIBLE);
+                    regClass.setVisibility(View.INVISIBLE);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

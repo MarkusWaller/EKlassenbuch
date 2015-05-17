@@ -2,6 +2,8 @@ package de.sap_project.e_klassenbuch.data;
 
 import java.util.Date;
 
+import de.sap_project.e_klassenbuch.db.AppConfig;
+
 /**
  * User data object
  * <p/>
@@ -15,15 +17,15 @@ public class User {
     private Integer id;
     private String className;
     private Date birthDate;
-    private Boolean isTeacher;
+    private AppConfig.UserType userType;
 
-    public User(Integer id, String firstName, String lastName, String email, String password, Boolean isTeacher, String className, Date birthDate) {
+    public User(Integer id, String firstName, String lastName, String email, String password, AppConfig.UserType userType, String className, Date birthDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.isTeacher = isTeacher;
+        this.userType = userType;
         this.className = className;
         this.birthDate = birthDate;
     }
@@ -68,13 +70,13 @@ public class User {
         this.id = id;
     }
 
-    public Boolean getIsTeacher() {
+    public AppConfig.UserType getUserType() {
 
-        return isTeacher;
+        return userType;
     }
 
-    public void setIsTeacher(Boolean isTeacher) {
-        this.isTeacher = isTeacher;
+    public void setUserType(AppConfig.UserType userType) {
+        this.userType = userType;
     }
 
     public Date getBirthDate() {

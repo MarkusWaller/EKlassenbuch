@@ -42,16 +42,16 @@ public class MainActivity extends ActionBarActivity {
         User user = session.getUser();
 
         // Displaying the user details on the screen
-        txtTeacher.setText((user.getIsTeacher()) ? "Lehrer" : "Schüler");
+        txtTeacher.setText(user.getUserType().toString());
         txtName.setText(user.getFirstName() + " " + user.getLastName());
         txtEmail.setText(user.getEmail());
         if (null != user.getBirthDate()) {
             txtDate.setText(AppConfig.formatter.format(user.getBirthDate()));
         }
 
-        if(user.getIsTeacher()){
+        if (user.getUserType().equals(AppConfig.UserType.TEACHER)) {
             btnTeacherClass.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             btnTeacherClass.setVisibility(View.INVISIBLE);
         }
 

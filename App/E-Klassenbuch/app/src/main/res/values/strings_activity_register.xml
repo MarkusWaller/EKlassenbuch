@@ -8,5 +8,5 @@
     <string name="reg_class">Klasse</string>
     <string name="button_register">Registrieren</string>
     <string name="button_link_to_login">Zur Anmeldung</string>
-    <string name="reg_teacher_checkbox">Als Lehrer registrieren</string>
+    <string name="reg_teacher_label">Registrieren als</string>
 </resources>

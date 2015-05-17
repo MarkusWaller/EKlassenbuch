@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,7 +39,7 @@ import de.sap_project.e_klassenbuch.db.SessionManager;
  * <p/>
  * Created by Markus on 24.04.2015.
  */
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -45,12 +47,19 @@ public class LoginActivity extends ActionBarActivity {
     private EditText inputPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
-    private boolean isTeacher = false;
+    private String url = AppConfig.URL_STUDENT_LOGIN;
+    private AppConfig.UserType userType = AppConfig.UserType.STUDENT;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Spinner loginSpinner = (Spinner) findViewById((R.id.login_spinner));
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_array, R.layout.simple_listview);
+        adapter.setDropDownViewResource(R.layout.simple_listview);
+        loginSpinner.setAdapter(adapter);
+        loginSpinner.setOnItemSelectedListener(this);
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
@@ -101,11 +110,6 @@ public class LoginActivity extends ActionBarActivity {
         });
     }
 
-    public void onCheckboxClicked(View view) {
-        // Ist die Checkbox angekreuzt
-        isTeacher = ((CheckBox) view).isChecked();
-    }
-
     /**
      * function to verify login details in mysql db
      */
@@ -115,12 +119,6 @@ public class LoginActivity extends ActionBarActivity {
 
         pDialog.setMessage(getString(R.string.login_running));
         showDialog();
-
-        String url = AppConfig.URL_STUDENT_LOGIN;
-
-        if (isTeacher) {
-            url = AppConfig.URL_TEACHER_LOGIN;
-        }
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
@@ -143,9 +141,16 @@ public class LoginActivity extends ActionBarActivity {
                     // Check for error node in json
                     if (success == 1) {
                         // user successfully logged in
-                        if (isTeacher) {
+                        if (userType.equals(AppConfig.UserType.TEACHER)) {
                             JSONArray user = jObj.getJSONArray("teacher");
                             db_id = user.getJSONObject(0).getInt("teacher_id");
+                            db_first_name = user.getJSONObject(0).getString("first_name");
+                            db_last_name = user.getJSONObject(0).getString("last_name");
+                            db_email = user.getJSONObject(0).getString("email");
+                            db_password = user.getJSONObject(0).getString("password");
+                        } else if (userType.equals(AppConfig.UserType.ADMIN)) {
+                            JSONArray user = jObj.getJSONArray("admin");
+                            db_id = user.getJSONObject(0).getInt("admin_id");
                             db_first_name = user.getJSONObject(0).getString("first_name");
                             db_last_name = user.getJSONObject(0).getString("last_name");
                             db_email = user.getJSONObject(0).getString("email");
@@ -164,7 +169,7 @@ public class LoginActivity extends ActionBarActivity {
                         if (passwordHash.equals(db_password)) {
                             // Create login session
                             session.setLogin(true);
-                            session.setUser(new User(db_id, db_first_name, db_last_name, db_email, db_password, isTeacher, db_class, db_birth_date));
+                            session.setUser(new User(db_id, db_first_name, db_last_name, db_email, db_password, userType, db_class, db_birth_date));
 
                             // Launch main activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -218,5 +223,33 @@ public class LoginActivity extends ActionBarActivity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Object item = parent.getItemAtPosition(position);
+
+        if (item instanceof String) {
+            String s = (String) item;
+            switch (s) {
+                case "Sch\u00fcler":
+                    url = AppConfig.URL_STUDENT_LOGIN;
+                    userType = AppConfig.UserType.STUDENT;
+                    break;
+                case "Lehrer":
+                    url = AppConfig.URL_TEACHER_LOGIN;
+                    userType = AppConfig.UserType.TEACHER;
+                    break;
+                case "Admin":
+                    url = AppConfig.URL_ADMIN_LOGIN;
+                    userType = AppConfig.UserType.ADMIN;
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

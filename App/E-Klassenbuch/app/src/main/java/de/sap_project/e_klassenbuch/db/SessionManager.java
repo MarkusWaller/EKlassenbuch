@@ -68,7 +68,7 @@ public class SessionManager {
                         pref.getString("UserLastName", "UserLastName"),
                         pref.getString("UserEmail", "UserEmail"),
                         pref.getString("UserPassword", "UserPassword"),
-                        pref.getBoolean("UserIsTeacher", false),
+                        AppConfig.UserType.valueOf(pref.getString("UserType", AppConfig.UserType.STUDENT.name())),
                         pref.getString("UserClass", "UserClass"),
                         AppConfig.formatter.parse(pref.getString("UserBirthDate", "0000-00-00"))
                 );
@@ -88,7 +88,7 @@ public class SessionManager {
         editor.putString("UserLastName", user.getLastName());
         editor.putString("UserPassword", user.getPassword());
         editor.putString("UserEmail", user.getEmail());
-        editor.putBoolean("UserIsTeacher", user.getIsTeacher());
+        editor.putString("UserType", user.getUserType().name());
         editor.putString("UserClass", user.getClassName());
         if (null != user.getBirthDate()) {
             editor.putString("UserBirthDate", AppConfig.formatter.format(user.getBirthDate()));

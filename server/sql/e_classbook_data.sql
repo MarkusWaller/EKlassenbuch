@@ -48,6 +48,13 @@ INSERT INTO `student` (`student_id`, `first_name`, `last_name`, `class`, `birth_
 INSERT INTO `teacher` (`teacher_id`, `last_name`, `first_name`, `email`, `password`) VALUES
 (1, 'Mustermann', 'Max', 'max@mustermann.de', 'Musterpasswort');
 
+--
+-- Daten für Tabelle `admin`
+--
+
+INSERT INTO `admin` (`admin_id`, `first_name`, `last_name`) VALUES
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

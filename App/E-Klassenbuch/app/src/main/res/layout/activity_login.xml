@@ -23,14 +23,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/teacher_checkbox"
-                android:id="@+id/checkBox"
-                android:onClick="onCheckboxClicked"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/teacher_label"
+                    android:id="@+id/login_label"
+                    android:layout_marginRight="5dp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/login_spinner" />
+            </LinearLayout>
 
             <AutoCompleteTextView
                 android:id="@+id/email"
