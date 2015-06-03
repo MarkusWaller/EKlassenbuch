@@ -34,8 +34,20 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_regristrierung" />
         <activity
-            android:name=".TeacherClass"
+            android:name=".TeacherClassActivity"
             android:label="@string/title_activity_teacher_class" >
+        </activity>
+        <activity
+            android:name=".AdminClassActivity"
+            android:label="@string/title_activity_admin_class"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.sap_project.e_klassenbuch.MainActivity" />
+        </activity>
+        <activity
+            android:name=".EditClassActivity"
+            android:label="@string/title_activity_edit_class" >
         </activity>
     </application>
 

@@ -3,8 +3,9 @@ package de.sap_project.e_klassenbuch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import de.sap_project.e_klassenbuch.data.User;
@@ -23,13 +24,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        TextView txtTeacher = (TextView) findViewById(R.id.textViewIsTeacher);
-        TextView txtName = (TextView) findViewById(R.id.textViewName);
-        TextView txtEmail = (TextView) findViewById(R.id.textViewEmail);
-        TextView txtDate = (TextView) findViewById(R.id.textViewDate);
-        Button btnTeacherClass = (Button) findViewById(R.id.buttonTeacherClass);
-        Button btnLogout = (Button) findViewById(R.id.buttonLogOut);
 
         // session manager
         session = SessionManager.getInstance();
@@ -40,40 +34,67 @@ public class MainActivity extends ActionBarActivity {
 
         // Fetching user details from SessionManager
         User user = session.getUser();
+        switch (user.getUserType()) {
+            case STUDENT:
+                setContentView(R.layout.activity_main);
+                fillTextViews(user);
+                TextView txtDate = (TextView) findViewById(R.id.textViewDate);
+                txtDate.setText(AppConfig.formatter.format(user.getBirthDate()));
+                break;
+            case TEACHER:
+                setContentView(R.layout.activity_main_teacher);
+                fillTextViews(user);
+                break;
+            case ADMIN:
+                setContentView(R.layout.activity_main_admin);
+                fillTextViews(user);
+                break;
+            default:
+                break;
+        }
+    }
 
+    private void fillTextViews(User user) {
+        TextView txtUserType = (TextView) findViewById(R.id.textViewUserType);
+        TextView txtName = (TextView) findViewById(R.id.textViewName);
+        TextView txtEmail = (TextView) findViewById(R.id.textViewEmail);
         // Displaying the user details on the screen
-        txtTeacher.setText(user.getUserType().toString());
+        txtUserType.setText(user.getUserType().toString());
         txtName.setText(user.getFirstName() + " " + user.getLastName());
         txtEmail.setText(user.getEmail());
-        if (null != user.getBirthDate()) {
-            txtDate.setText(AppConfig.formatter.format(user.getBirthDate()));
+    }
+
+    public void onClickTeacher(View view) {
+        Intent i = new Intent(getApplicationContext(), TeacherClassActivity.class);
+        startActivity(i);
+    }
+
+    public void onClickAdmin(View view) {
+        Intent i = new Intent(getApplicationContext(), AdminClassActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_logout) {
+            logoutUser();
+            return true;
         }
 
-        if (user.getUserType().equals(AppConfig.UserType.TEACHER)) {
-            btnTeacherClass.setVisibility(View.VISIBLE);
-        } else {
-            btnTeacherClass.setVisibility(View.INVISIBLE);
-        }
-
-        // Teacher Class button click event
-        btnTeacherClass.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), TeacherClass.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        // Logout button click event
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                logoutUser();
-            }
-        });
+        return super.onOptionsItemSelected(item);
     }
 
     /**

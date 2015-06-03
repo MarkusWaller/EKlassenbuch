@@ -6,6 +6,7 @@
     <string name="button_logout">Abmelden</string>
     <string name="Nachname">Name</string>
     <string name="main_date"></string>
-    <string name="main_isTeacher"></string>
+    <string name="main_userType"></string>
     <string name="button_teacher_class">Klassen</string>
+    <string name="button_admin_class">Klassen</string>
 </resources>

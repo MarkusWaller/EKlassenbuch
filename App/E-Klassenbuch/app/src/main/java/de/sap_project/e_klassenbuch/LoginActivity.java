@@ -105,7 +105,6 @@ public class LoginActivity extends ActionBarActivity implements AdapterView.OnIt
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(i);
-                finish();
             }
         });
     }

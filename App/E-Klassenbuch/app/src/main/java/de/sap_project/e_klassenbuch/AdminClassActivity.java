@@ -1,15 +1,14 @@
 package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,80 +20,109 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import de.sap_project.e_klassenbuch.data.User;
 import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
-import de.sap_project.e_klassenbuch.db.SessionManager;
 
 
-public class TeacherClass extends ActionBarActivity {
+public class AdminClassActivity extends ActionBarActivity {
     // LogCat tag
-    private static final String TAG = TeacherClass.class.getSimpleName();
+    private static final String TAG = AdminClassActivity.class.getSimpleName();
 
-    private SessionManager session;
     private ProgressDialog pDialog;
-    private TextView txtClass;
     private ListView listView;
+    private List<HashMap<String, String>> listMap = new ArrayList<>();
+    private HashMap<Integer, String> teacherMap = new HashMap<>();
+    private String[] from = new String[]{"col_1", "col_2"};
+    private int[] to = new int[]{R.id.textViewCol1, R.id.textViewCol2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_class);
+        setContentView(R.layout.activity_admin_class);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        TextView txtName = (TextView) findViewById(R.id.textViewTeachClassName);
-        txtClass = (TextView) findViewById(R.id.textViewHTeacher);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listViewAdminClass);
 
-        session = SessionManager.getInstance();
-
-        User user = session.getUser();
-        txtName.setText(user.getFirstName() + " " + user.getLastName());
-
-        readDbClass(user);
-        readDbBook(user);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_teacher_class, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        readDbTeacher();
     }
 
     /**
-     * function to verify login details in mysql db
+     * read class table from db
      */
-    private void readDbClass(final User user) {
+    private void readDbTeacher() {
         // Tag used to cancel the request
-        String tag_string_req = "req_login";
+        String tag_string_req = "req_readDbTeacher";
 
-        pDialog.setMessage(getString(R.string.login_running));
+        pDialog.setMessage("Lese Lehrer ...");
+        showDialog();
+
+        String url = AppConfig.URL_TEACHER_GET_ALL;
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Teacher Response: " + response);
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    // Check for error node in json
+                    if (success == 1) {
+                        // Class data
+                        JSONArray teacherData = jObj.getJSONArray("teacher");
+                        for (int i = 0; i < teacherData.length(); i++) {
+                            JSONObject c = teacherData.getJSONObject(i);
+                            int teacher_id = c.getInt("teacher_id");
+                            String first_name = c.getString("first_name");
+                            String last_name = c.getString("last_name");
+                            teacherMap.put(teacher_id, first_name + " " + last_name);
+                        }
+                        readDbClass();
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    /**
+     * read class table from db
+     */
+    private void readDbClass() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_readDbClass";
+
+        pDialog.setMessage("Lese Klassen ...");
         showDialog();
 
         String url = AppConfig.URL_CLASS_GET_ALL;
@@ -119,12 +147,13 @@ public class TeacherClass extends ActionBarActivity {
                             JSONObject c = classData.getJSONObject(i);
                             String name = c.getString("name");
                             int h_teacher = c.getInt("h_teacher");
-                            if (h_teacher == user.getId()) {
-                                user.setClassName(name);
-                                txtClass.setText(user.getClassName());
 
-                            }
+                            HashMap<String, String> map = new HashMap();
+                            map.put(from[0], name);
+                            map.put(from[1], teacherMap.get(h_teacher));
+                            listMap.add(map);
                         }
+                        fillListView();
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("message");
@@ -139,99 +168,50 @@ public class TeacherClass extends ActionBarActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
+                Log.e(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-                return params;
-            }
         };
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private void readDbBook(final User user) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-
-        pDialog.setMessage(getString(R.string.login_running));
-        showDialog();
-
-        String url = AppConfig.URL_BOOK_GET_ALL;
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Book Response: " + response);
-                hideDialog();
-                List classList = new ArrayList<String>();
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    int success = jObj.getInt("success");
-
-                    // Check for error node in json
-                    if (success == 1) {
-                        // Class data
-                        JSONArray classData = jObj.getJSONArray("book");
-                        for (int i = 0; i < classData.length(); i++) {
-                            JSONObject c = classData.getJSONObject(i);
-                            int book_id = c.getInt("book_id");
-                            Date date = AppConfig.formatter.parse(c.getString("date"));
-                            String subject = c.getString("subject");
-                            int teacher = c.getInt("teacher");
-                            String class_name = c.getString("class");
-                            String info = c.getString("info");
-
-                            if (teacher == user.getId()) {
-                                classList.add(class_name+"  -  "+subject);
-                            }
-                        }
-                        ListAdapter adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.simple_listview, classList);
-                        listView.setAdapter(adapter);
-                    } else {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("message");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    // JSON error
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-                return params;
-            }
-        };
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    /**
+     * fill the data in the listview_two_column layout
+     */
+    private void fillListView() {
+        SimpleAdapter adapter = new SimpleAdapter(this, listMap, R.layout.listview_two_column, from, to);
+        listView.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_admin_class, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_addClass) {
+            // Launch main activity
+            Intent intent = new Intent(AdminClassActivity.this, EditClassActivity.class);
+            intent.putExtra("teacherMap", teacherMap);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void showDialog() {
         if (!pDialog.isShowing())

@@ -41,13 +41,12 @@
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/main_date"
-        android:id="@+id/textViewDate"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp" />
+        android:text="@string/button_teacher_class"
+        android:id="@+id/buttonTeacherClass"
+        android:layout_margin="16dp"
+        android:onClick="onClickTeacher" />
 
 </LinearLayout>
