@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="admin_class_context_array">
+        <item>Ändern</item>
+        <item>Löschen</item>
+    </string-array>
+</resources>

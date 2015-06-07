@@ -25,6 +25,9 @@ public class AppConfig {
     //server class urls
     public static String URL_CLASS_GET_ALL = URL_PRAEFIX + "/class/get_all.php";
     public static String URL_CLASS_CREATE = URL_PRAEFIX + "/class/create.php";
+    public static String URL_CLASS_DELETE = URL_PRAEFIX + "/class/delete.php";
+    public static String URL_CLASS_UPDATE = URL_PRAEFIX + "/class/update.php";
+
     //server book urls
     public static String URL_BOOK_GET_ALL = URL_PRAEFIX + "/book/get_all.php";
 

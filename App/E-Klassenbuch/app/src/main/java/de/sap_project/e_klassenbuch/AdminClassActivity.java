@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
@@ -49,6 +53,12 @@ public class AdminClassActivity extends ActionBarActivity {
         pDialog.setCancelable(false);
 
         listView = (ListView) findViewById(R.id.listViewAdminClass);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.d(TAG, "onStart");
 
         readDbTeacher();
     }
@@ -125,6 +135,8 @@ public class AdminClassActivity extends ActionBarActivity {
         pDialog.setMessage("Lese Klassen ...");
         showDialog();
 
+        listMap.clear();
+
         String url = AppConfig.URL_CLASS_GET_ALL;
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -186,6 +198,48 @@ public class AdminClassActivity extends ActionBarActivity {
     private void fillListView() {
         SimpleAdapter adapter = new SimpleAdapter(this, listMap, R.layout.listview_two_column, from, to);
         listView.setAdapter(adapter);
+        registerForContextMenu(listView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.listViewAdminClass){
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            menu.setHeaderTitle(listMap.get(info.position).get(from[0]));
+            String[] menuItems = getResources().getStringArray(R.array.admin_class_context_array);
+            for (int i = 0; i<menuItems.length;i++){
+                menu.add(Menu.NONE,i,i,menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        String[] menuItems = getResources().getStringArray(R.array.admin_class_context_array);
+        String menuItemName = menuItems[menuItemIndex];
+        String className = listMap.get(info.position).get(from[0]);
+        String h_teacherName = listMap.get(info.position).get(from[1]);
+
+
+        switch (menuItemName){
+            case "Löschen":
+                deleteClass(className);
+                break;
+            case "Ändern":
+                // Launch EditClass activity
+                Intent intent = new Intent(AdminClassActivity.this, EditClassActivity.class);
+                intent.putExtra("teacherMap", teacherMap);
+                intent.putExtra("className",className);
+                intent.putExtra("h_teacherName",h_teacherName);
+                intent.putExtra("edit",true);
+                startActivity(intent);
+                break;
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -204,7 +258,7 @@ public class AdminClassActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_addClass) {
-            // Launch main activity
+            // Launch EditClass activity
             Intent intent = new Intent(AdminClassActivity.this, EditClassActivity.class);
             intent.putExtra("teacherMap", teacherMap);
             startActivity(intent);
@@ -213,6 +267,65 @@ public class AdminClassActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void deleteClass(final String class_name) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_deleteClass";
+
+        pDialog.setMessage("Lösche Klasse ...");
+        showDialog();
+        String url = AppConfig.URL_CLASS_DELETE;
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Delete Response: " + response);
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    // Check for error node in json
+                    if (success == 1) {
+                        // user successfully registered
+                        String successMsg = jObj.getString("message");
+                        Toast.makeText(getApplicationContext(),
+                                successMsg, Toast.LENGTH_LONG).show();
+                        readDbTeacher();
+                    } else {
+                        // Error in registration. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Delete Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to registration url
+                Map<String, String> params = new HashMap<>();
+                params.put("name", class_name);
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();

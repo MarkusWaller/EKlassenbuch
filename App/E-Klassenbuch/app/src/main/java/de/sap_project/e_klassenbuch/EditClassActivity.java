@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
     private String url = AppConfig.URL_CLASS_CREATE;
     private String h_teacher;
     private HashMap<Integer, String> teacherMap = new HashMap<>();
+    private Boolean edit;
 
     private ProgressDialog pDialog;
 
@@ -48,6 +50,9 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         setContentView(R.layout.activity_edit_class);
 
         teacherMap = (HashMap<Integer, String>) getIntent().getSerializableExtra("teacherMap");
+        edit = getIntent().getBooleanExtra("edit", false);
+        String className = getIntent().getStringExtra("className");
+        String h_teacherName = getIntent().getStringExtra("h_teacherName");
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -60,16 +65,33 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         adapter.setDropDownViewResource(R.layout.simple_listview);
         hTeacherSpinner.setAdapter(adapter);
         hTeacherSpinner.setOnItemSelectedListener(this);
+        if (edit) {
+            final int position = adapter.getPosition(h_teacherName);
+            hTeacherSpinner.post(new Runnable() {
+                @Override
+                public void run() {
+                    hTeacherSpinner.setSelection(position);
+                }
+            });
+        }
 
         class_name = (EditText) findViewById(R.id.class_name);
+        class_name.setText(className);
+        if (edit) {
+            class_name.setEnabled(false);
+        }
+
+        Button button = (Button) findViewById(R.id.edit_button);
+        button.setText("Ändern");
+
     }
 
     public void onClickEditClass(View view) {
         String name = class_name.getText().toString();
 
         String h_teacher_id = "";
-        for (Integer key: teacherMap.keySet()){
-            if(teacherMap.get(key).equals(h_teacher)){
+        for (Integer key : teacherMap.keySet()) {
+            if (teacherMap.get(key).equals(h_teacher)) {
                 h_teacher_id = key.toString();
             }
         }
@@ -84,6 +106,9 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         pDialog.setMessage("Editierung läuft ...");
         showDialog();
 
+        if (edit) {
+            url = AppConfig.URL_CLASS_UPDATE;
+        }
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
 
