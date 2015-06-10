@@ -30,6 +30,7 @@ public class AppConfig {
 
     //server book urls
     public static String URL_BOOK_GET_ALL = URL_PRAEFIX + "/book/get_all.php";
+    public static String URL_BOOK_CREATE = URL_PRAEFIX + "/book/create.php";
 
 
     // Date Format for Database

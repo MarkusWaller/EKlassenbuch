@@ -25,7 +25,7 @@ if (isset($_POST['date']) && isset($_POST['subject']) && isset($_POST['teacher']
     $db = new DB_CONNECT();
  
     // mysql inserting a new row
-    $result = mysql_query("INSERT INTO book(date, subject, teacher, info) VALUES('$date', '$subject', '$teacher', '$info')");
+    $result = mysql_query("INSERT INTO book(date, subject, teacher, class, info) VALUES('$date', '$subject', '$teacher', '$class', '$info')");
  
     // check if row inserted or not
     if ($result) {

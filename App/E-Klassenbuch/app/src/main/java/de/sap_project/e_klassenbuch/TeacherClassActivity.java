@@ -1,14 +1,19 @@
 package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +47,11 @@ public class TeacherClassActivity extends ActionBarActivity {
     private ProgressDialog pDialog;
     private TextView txtClass;
     private ListView listView;
+    private List<HashMap<String, String>> classList = new ArrayList<>();
+    private String[] from = new String[]{"col_1", "col_2"};
+    private int[] to = new int[]{R.id.textViewCol1, R.id.textViewCol2};
+    private String teacherName;
+    private int teacher_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +69,9 @@ public class TeacherClassActivity extends ActionBarActivity {
         session = SessionManager.getInstance();
 
         User user = session.getUser();
-        txtName.setText(user.getFirstName() + " " + user.getLastName());
+        teacherName = user.getFirstName() + " " + user.getLastName();
+        txtName.setText(teacherName);
+        teacher_id = user.getId();
 
         readDbClass(user);
         readDbBook(user);
@@ -85,6 +97,47 @@ public class TeacherClassActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.listView){
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            menu.setHeaderTitle(classList.get(info.position).get(from[0]));
+            String[] menuItems = getResources().getStringArray(R.array.teacher_class_context_array);
+            for (int i = 0; i<menuItems.length;i++){
+                menu.add(Menu.NONE,i,i,menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        String[] menuItems = getResources().getStringArray(R.array.teacher_class_context_array);
+        String menuItemName = menuItems[menuItemIndex];
+        String className = classList.get(info.position).get(from[0]);
+        String subject = classList.get(info.position).get(from[1]);
+
+
+        switch (menuItemName){
+            case "Neuer Eintrag":
+                // Launch EditClass activity
+                Intent intent = new Intent(TeacherClassActivity.this, EditBookActivity.class);
+                intent.putExtra("className",className);
+                intent.putExtra("subject",subject);
+                intent.putExtra("teacherName",teacherName);
+                intent.putExtra("teacher_id",teacher_id);
+
+                startActivity(intent);
+                break;
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     /**
@@ -176,7 +229,6 @@ public class TeacherClassActivity extends ActionBarActivity {
             public void onResponse(String response) {
                 Log.d(TAG, "Book Response: " + response);
                 hideDialog();
-                List classList = new ArrayList<String>();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -196,11 +248,13 @@ public class TeacherClassActivity extends ActionBarActivity {
                             String info = c.getString("info");
 
                             if (teacher == user.getId()) {
-                                classList.add(class_name+"  -  "+subject);
+                                HashMap<String, String> map = new HashMap();
+                                map.put(from[0], class_name);
+                                map.put(from[1], subject);
+                                classList.add(map);
                             }
                         }
-                        ListAdapter adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.simple_listview, classList);
-                        listView.setAdapter(adapter);
+                        fillListView();
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("message");
@@ -235,6 +289,14 @@ public class TeacherClassActivity extends ActionBarActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    /**
+     * fill the data in the listview_two_column layout
+     */
+    private void fillListView() {
+        SimpleAdapter adapter = new SimpleAdapter(this, classList, R.layout.listview_two_column, from, to);
+        listView.setAdapter(adapter);
+        registerForContextMenu(listView);
+    }
 
     private void showDialog() {
         if (!pDialog.isShowing())
