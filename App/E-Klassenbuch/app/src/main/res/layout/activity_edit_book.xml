@@ -1,82 +1,122 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="de.sap_project.e_klassenbuch.EditBookActivity"
     android:columnCount="2"
-    android:rowCount="5">
+    android:rowCount="5"
+    android:useDefaultMargins="true"
+    android:rowOrderPreserved="false">
 
-    <TextView android:text="Lehrer: " android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView5"
-        android:textSize="18dp"
-        android:layout_weight="1"
-        android:layout_columnWeight="1" />
-
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/teacher_book"
-        android:textSize="18dp"
-        android:layout_weight="1"
-        android:layout_columnWeight="1" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/ll_row_1"
+        android:layout_margin="10dp">
 
-    <TextView
+        <TextView
+            android:text="@string/label_teacher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_teacher"
+            android:textSize="18sp"
+            android:layout_columnWeight="1"
+            android:layout_weight="2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/blank_text"
+            android:id="@+id/teacher_book"
+            android:textSize="18sp"
+            android:layout_columnWeight="1"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Fach: "
-        android:id="@+id/textView6"
-        android:textSize="18dp"
-        android:layout_weight="1"
-        android:layout_columnWeight="1" />
+        android:layout_below="@+id/ll_row_1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:id="@+id/ll_row_2"
+        android:layout_margin="10dp">
 
-    <TextView
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_subject"
+            android:id="@+id/tv_subject"
+            android:textSize="18sp"
+            android:layout_columnWeight="1"
+            android:layout_weight="2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/blank_text"
+            android:id="@+id/subject_book"
+            android:textSize="18sp"
+            android:layout_columnWeight="1"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/subject_book"
-        android:layout_weight="1"
-        android:textSize="18dp"
-        android:layout_columnWeight="1" />
+        android:layout_alignParentStart="false"
+        android:id="@+id/ll_row_3"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ll_row_2"
+        android:layout_margin="10dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Datum: "
-        android:id="@+id/textView7"
-        android:textSize="18dp"
-        android:layout_weight="1"
-        android:layout_columnWeight="1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_date"
+            android:id="@+id/tv_date"
+            android:textSize="18sp"
+            android:layout_columnWeight="1"
+            android:layout_weight="2" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/datum_book"
+            android:textSize="18sp"
+            android:layout_columnWeight="1"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/datum_book"
-        android:layout_weight="1"
-        android:textSize="18dp"
-        android:layout_columnWeight="1" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:inputType="textMultiLine"
-        android:ems="10"
+        android:gravity="top|left"
         android:id="@+id/text_book"
-        android:layout_columnSpan="2" />
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_above="@+id/button_book"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ll_row_3"
+        android:layout_margin="10dp" />
 
     <Button
-        android:layout_width="162dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Eintrag Erstellen"
         android:id="@+id/button_book"
-        android:layout_row="4"
-        android:layout_columnSpan="2"
         android:layout_gravity="center_horizontal"
-        android:onClick="onClickEditBook" />
+        android:onClick="onClickEditBook"
+        android:layout_columnWeight="1"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp" />
 
-</GridLayout>
+</RelativeLayout>
