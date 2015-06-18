@@ -9,4 +9,5 @@
     <string name="main_userType"></string>
     <string name="button_teacher_class">Klassen</string>
     <string name="button_admin_class">Klassen</string>
+    <string name="button_student_book">Einträge</string>
 </resources>

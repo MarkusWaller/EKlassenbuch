@@ -53,6 +53,10 @@
             android:name=".EditBookActivity"
             android:label="@string/title_activity_edit_book" >
         </activity>
+        <activity
+            android:name=".StudentBookListActivity"
+            android:label="@string/title_activity_student_book_list" >
+        </activity>
     </application>
 
 </manifest>

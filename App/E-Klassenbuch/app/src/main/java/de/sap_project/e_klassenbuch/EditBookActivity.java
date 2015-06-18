@@ -1,12 +1,14 @@
 package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,8 @@ public class EditBookActivity extends ActionBarActivity {
     private String url = AppConfig.URL_BOOK_CREATE;
     private EditText datumView;
     private EditText infoView;
+    private Boolean view;
+    private Button button_book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,9 @@ public class EditBookActivity extends ActionBarActivity {
         teacher_name = getIntent().getStringExtra("teacherName");
         subject = getIntent().getStringExtra("subject");
         className = getIntent().getStringExtra("className");
-        teacher_id = getIntent().getIntExtra("teacher_id",0);
+        teacher_id = getIntent().getIntExtra("teacher_id", 0);
+        view = getIntent().getBooleanExtra("view", false);
+        String info = getIntent().getStringExtra("info");
 
         TextView teacherView = (TextView) findViewById(R.id.teacher_book);
         teacherView.setText(teacher_name);
@@ -64,6 +70,17 @@ public class EditBookActivity extends ActionBarActivity {
         datumView.setText(AppConfig.formatter.format(new Date()));
 
         infoView = (EditText) findViewById(R.id.text_book);
+
+        Button button_book = (Button) findViewById(R.id.button_book);
+
+        if (view) {
+            datumView.setEnabled(false);
+            datumView.setTextColor(subjectView.getCurrentTextColor());
+            infoView.setEnabled(false);
+            infoView.setText(info);
+            infoView.setTextColor(subjectView.getCurrentTextColor());
+            button_book.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void onClickEditBook(View view) {
@@ -83,6 +100,7 @@ public class EditBookActivity extends ActionBarActivity {
 //        if (edit) {
 //            url = AppConfig.URL_CLASS_UPDATE;
 //        }
+
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
 

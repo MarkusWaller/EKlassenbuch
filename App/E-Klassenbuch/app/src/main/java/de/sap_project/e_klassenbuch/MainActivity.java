@@ -73,6 +73,10 @@ public class MainActivity extends ActionBarActivity {
         Intent i = new Intent(getApplicationContext(), AdminClassActivity.class);
         startActivity(i);
     }
+    public void onClickStudentBook(View view){
+        Intent i = new Intent (getApplicationContext(),StudentBookListActivity.class);
+        startActivity(i);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
