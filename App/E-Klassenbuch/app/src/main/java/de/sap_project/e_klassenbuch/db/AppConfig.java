@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat;
  * Created by Markus on 24.04.2015.
  */
 public class AppConfig {
-    //public static String URL_PRAEFIX = "http://markus.fam-waller.de/ecb";
-    public static String URL_PRAEFIX = "http://192.168.178.30/ecb";
+    public static String URL_PRAEFIX = "http://markus.fam-waller.de/ecb";
+    //public static String URL_PRAEFIX = "http://192.168.178.30/ecb";
 
     // Server Student urls
     public static String URL_STUDENT_LOGIN = URL_PRAEFIX + "/student/get_by_email.php";
@@ -32,7 +32,9 @@ public class AppConfig {
     public static String URL_BOOK_GET_ALL = URL_PRAEFIX + "/book/get_all.php";
     public static String URL_BOOK_CREATE = URL_PRAEFIX + "/book/create.php";
     public static String URL_BOOK_GET_BY_CLASS = URL_PRAEFIX + "/book/get_by_class.php";
-
+    public static String URL_BOOK_GET_BY_TEACHER = URL_PRAEFIX + "/book/get_by_teacher.php";
+    public static String URL_BOOK_UPDATE = URL_PRAEFIX + "/book/update.php";
+    public static String URL_BOOK_DELETE = URL_PRAEFIX + "/book/delete.php";
 
     // Date Format for Database
     public static final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

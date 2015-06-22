@@ -223,7 +223,6 @@ public class AdminClassActivity extends ActionBarActivity {
         String className = listMap.get(info.position).get(from[0]);
         String h_teacherName = listMap.get(info.position).get(from[1]);
 
-
         switch (menuItemName){
             case "Löschen":
                 deleteClass(className);

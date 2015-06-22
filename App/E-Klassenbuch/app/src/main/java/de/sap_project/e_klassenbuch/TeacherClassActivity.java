@@ -99,8 +99,6 @@ public class TeacherClassActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -120,15 +118,14 @@ public class TeacherClassActivity extends ActionBarActivity {
         int menuItemIndex = item.getItemId();
         String[] menuItems = getResources().getStringArray(R.array.teacher_class_context_array);
         String menuItemName = menuItems[menuItemIndex];
-        String className = classList.get(info.position).get(from[0]);
+        String class_name = classList.get(info.position).get(from[0]);
         String subject = classList.get(info.position).get(from[1]);
-
 
         switch (menuItemName){
             case "Neuer Eintrag":
                 // Launch EditClass activity
                 Intent intent = new Intent(TeacherClassActivity.this, EditBookActivity.class);
-                intent.putExtra("className",className);
+                intent.putExtra("class_name",class_name);
                 intent.putExtra("subject",subject);
                 intent.putExtra("teacherName",teacherName);
                 intent.putExtra("teacher_id",teacher_id);
@@ -175,7 +172,6 @@ public class TeacherClassActivity extends ActionBarActivity {
                             if (h_teacher == user.getId()) {
                                 user.setClassName(name);
                                 txtClass.setText(user.getClassName());
-
                             }
                         }
                     } else {

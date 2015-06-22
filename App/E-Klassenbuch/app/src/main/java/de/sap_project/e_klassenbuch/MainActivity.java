@@ -78,6 +78,11 @@ public class MainActivity extends ActionBarActivity {
         startActivity(i);
     }
 
+    public void onClickTeacherBook(View view){
+        Intent i = new Intent (getApplicationContext(),TeacherBookListActivity.class);
+        startActivity(i);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

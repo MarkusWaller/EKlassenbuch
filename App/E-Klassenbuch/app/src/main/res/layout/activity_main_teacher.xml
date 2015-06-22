@@ -49,4 +49,12 @@
         android:layout_margin="16dp"
         android:onClick="onClickTeacher" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_teacher_book"
+        android:id="@+id/buttonTeacherBook"
+        android:layout_margin="16dp"
+        android:onClick="onClickTeacherBook" />
+
 </LinearLayout>

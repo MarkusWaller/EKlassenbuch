@@ -65,6 +65,12 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         adapter.setDropDownViewResource(R.layout.simple_listview);
         hTeacherSpinner.setAdapter(adapter);
         hTeacherSpinner.setOnItemSelectedListener(this);
+
+        class_name = (EditText) findViewById(R.id.class_name);
+        class_name.setText(className);
+
+        Button button = (Button) findViewById(R.id.edit_button);
+
         if (edit) {
             final int position = adapter.getPosition(h_teacherName);
             hTeacherSpinner.post(new Runnable() {
@@ -73,17 +79,11 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
                     hTeacherSpinner.setSelection(position);
                 }
             });
-        }
 
-        class_name = (EditText) findViewById(R.id.class_name);
-        class_name.setText(className);
-        if (edit) {
             class_name.setEnabled(false);
+
+            button.setText("Ändern");
         }
-
-        Button button = (Button) findViewById(R.id.edit_button);
-        button.setText("Ändern");
-
     }
 
     public void onClickEditClass(View view) {

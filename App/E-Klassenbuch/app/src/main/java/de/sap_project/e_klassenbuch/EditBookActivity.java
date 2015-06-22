@@ -33,15 +33,17 @@ public class EditBookActivity extends ActionBarActivity {
     // LogCat tag
     private static final String TAG = EditBookActivity.class.getSimpleName();
 
+    private String book_id;
     private String teacher_name;
     private String subject;
-    private String className;
+    private String class_name;
     private Integer teacher_id;
     private ProgressDialog pDialog;
     private String url = AppConfig.URL_BOOK_CREATE;
     private EditText datumView;
     private EditText infoView;
     private Boolean view;
+    private Boolean edit;
     private Button button_book;
 
     @Override
@@ -53,11 +55,13 @@ public class EditBookActivity extends ActionBarActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
+        book_id = getIntent().getStringExtra("book_id");
         teacher_name = getIntent().getStringExtra("teacherName");
         subject = getIntent().getStringExtra("subject");
-        className = getIntent().getStringExtra("className");
+        class_name = getIntent().getStringExtra("class_name");
         teacher_id = getIntent().getIntExtra("teacher_id", 0);
         view = getIntent().getBooleanExtra("view", false);
+        edit = getIntent().getBooleanExtra("edit", false);
         String info = getIntent().getStringExtra("info");
 
         TextView teacherView = (TextView) findViewById(R.id.teacher_book);
@@ -70,6 +74,7 @@ public class EditBookActivity extends ActionBarActivity {
         datumView.setText(AppConfig.formatter.format(new Date()));
 
         infoView = (EditText) findViewById(R.id.text_book);
+        infoView.setText(info);
 
         Button button_book = (Button) findViewById(R.id.button_book);
 
@@ -77,9 +82,11 @@ public class EditBookActivity extends ActionBarActivity {
             datumView.setEnabled(false);
             datumView.setTextColor(subjectView.getCurrentTextColor());
             infoView.setEnabled(false);
-            infoView.setText(info);
             infoView.setTextColor(subjectView.getCurrentTextColor());
             button_book.setVisibility(View.INVISIBLE);
+        }
+        if (edit) {
+            button_book.setText("Ändern");
         }
     }
 
@@ -87,19 +94,19 @@ public class EditBookActivity extends ActionBarActivity {
         String date = datumView.getText().toString();
         String info = infoView.getText().toString();
 
-        editBook(date, subject, teacher_id.toString(), className, info);
+        editBook(date, subject, teacher_id.toString(), class_name, info);
     }
 
-    private void editBook(final String date, final String subject, final String teacher, final String className, final String info) {
+    private void editBook(final String date, final String subject, final String teacher, final String class_name, final String info) {
         // Tag used to cancel the request
         String tag_string_req = "req_editBook";
 
-        pDialog.setMessage("Editierung l�uft ...");
+        pDialog.setMessage("Editierung läuft ...");
         showDialog();
 
-//        if (edit) {
-//            url = AppConfig.URL_CLASS_UPDATE;
-//        }
+        if (edit) {
+            url = AppConfig.URL_BOOK_UPDATE;
+        }
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
@@ -146,10 +153,13 @@ public class EditBookActivity extends ActionBarActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to registration url
                 Map<String, String> params = new HashMap<>();
+                if (edit){
+                    params.put("book_id",book_id);
+                }
                 params.put("date", date);
                 params.put("subject", subject);
                 params.put("teacher", teacher);
-                params.put("class", className);
+                params.put("class", class_name);
                 params.put("info", info);
                 return params;
             }
