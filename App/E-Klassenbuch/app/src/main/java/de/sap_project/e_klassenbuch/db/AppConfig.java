@@ -35,6 +35,7 @@ public class AppConfig {
     public static String URL_BOOK_GET_BY_TEACHER = URL_PRAEFIX + "/book/get_by_teacher.php";
     public static String URL_BOOK_UPDATE = URL_PRAEFIX + "/book/update.php";
     public static String URL_BOOK_DELETE = URL_PRAEFIX + "/book/delete.php";
+    public static String URL_BOOK_GET_SUBJECT_CLASS_BY_TEACHER = URL_PRAEFIX + "/book/get_subject_class_by_teacher";
 
     // Date Format for Database
     public static final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

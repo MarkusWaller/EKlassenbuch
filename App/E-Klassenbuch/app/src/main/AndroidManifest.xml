@@ -32,7 +32,7 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/title_activity_regristrierung" />
+            android:label="@string/title_activity_registration" />
         <activity
             android:name=".TeacherClassActivity"
             android:label="@string/title_activity_teacher_class" >

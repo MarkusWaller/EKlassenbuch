@@ -1,15 +1,17 @@
 package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,21 +20,25 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 
 
-public class EditBookActivity extends ActionBarActivity {
+public class EditBookActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
     private static final String TAG = EditBookActivity.class.getSimpleName();
 
+    private List<String> classList = new ArrayList<>();
     private String book_id;
     private String teacher_name;
     private String subject;
@@ -42,9 +48,11 @@ public class EditBookActivity extends ActionBarActivity {
     private String url = AppConfig.URL_BOOK_CREATE;
     private EditText datumView;
     private EditText infoView;
+    private EditText subjectView;
     private Boolean view;
     private Boolean edit;
     private Button button_book;
+    private Spinner classSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,30 +75,38 @@ public class EditBookActivity extends ActionBarActivity {
         TextView teacherView = (TextView) findViewById(R.id.teacher_book);
         teacherView.setText(teacher_name);
 
-        TextView subjectView = (TextView) findViewById(R.id.subject_book);
+        subjectView = (EditText) findViewById(R.id.subject_book);
         subjectView.setText(subject);
 
         datumView = (EditText) findViewById(R.id.datum_book);
         datumView.setText(AppConfig.formatter.format(new Date()));
 
+        classSpinner = (Spinner) findViewById((R.id.class_spinner));
+
         infoView = (EditText) findViewById(R.id.text_book);
         infoView.setText(info);
 
-        Button button_book = (Button) findViewById(R.id.button_book);
+        button_book = (Button) findViewById(R.id.button_book);
 
         if (view) {
+            subjectView.setEnabled(false);
+            subjectView.setTextColor(teacherView.getCurrentTextColor());
+            classSpinner.setEnabled(false);
             datumView.setEnabled(false);
-            datumView.setTextColor(subjectView.getCurrentTextColor());
+            datumView.setTextColor(teacherView.getCurrentTextColor());
             infoView.setEnabled(false);
-            infoView.setTextColor(subjectView.getCurrentTextColor());
+            infoView.setTextColor(teacherView.getCurrentTextColor());
             button_book.setVisibility(View.INVISIBLE);
         }
         if (edit) {
             button_book.setText("Ändern");
         }
+
+        readDbClass();
     }
 
     public void onClickEditBook(View view) {
+        subject = subjectView.getText().toString();
         String date = datumView.getText().toString();
         String info = infoView.getText().toString();
 
@@ -122,14 +138,14 @@ public class EditBookActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // user successfully registered
+                        // book successfully created / updated
                         String successMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 successMsg, Toast.LENGTH_LONG).show();
 
                         finish();
                     } else {
-                        // Error in registration. Get the error message
+                        // Error in creation / update. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -151,7 +167,7 @@ public class EditBookActivity extends ActionBarActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to registration url
+                // Posting parameters to create / update url
                 Map<String, String> params = new HashMap<>();
                 if (edit){
                     params.put("book_id",book_id);
@@ -169,6 +185,84 @@ public class EditBookActivity extends ActionBarActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    /**
+     * read class table from db
+     */
+    private void readDbClass() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_readDbClass";
+
+        pDialog.setMessage("Lese Klassen ...");
+        showDialog();
+
+        classList.clear();
+
+        String url = AppConfig.URL_CLASS_GET_ALL;
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Class Response: " + response);
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    // Check for error node in json
+                    if (success == 1) {
+                        // Class data
+                        JSONArray classData = jObj.getJSONArray("class");
+                        for (int i = 0; i < classData.length(); i++) {
+                            JSONObject c = classData.getJSONObject(i);
+                            String name = c.getString("name");
+                            classList.add(name);
+                        }
+                        fillSpinnerList();
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    private void fillSpinnerList() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_listview, classList);
+        adapter.setDropDownViewResource(R.layout.simple_listview);
+        classSpinner.setAdapter(adapter);
+        classSpinner.setOnItemSelectedListener(this);
+
+        final int position = adapter.getPosition(class_name);
+        classSpinner.post(new Runnable() {
+            @Override
+            public void run() {
+                classSpinner.setSelection(position);
+            }
+        });
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -184,7 +278,7 @@ public class EditBookActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
             return true;
         }
 
@@ -199,5 +293,15 @@ public class EditBookActivity extends ActionBarActivity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        class_name = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

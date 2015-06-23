@@ -10,8 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -26,9 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +48,7 @@ public class TeacherClassActivity extends ActionBarActivity {
     private int[] to = new int[]{R.id.textViewCol1, R.id.textViewCol2};
     private String teacherName;
     private int teacher_id;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +65,16 @@ public class TeacherClassActivity extends ActionBarActivity {
 
         session = SessionManager.getInstance();
 
-        User user = session.getUser();
+        user = session.getUser();
         teacherName = user.getFirstName() + " " + user.getLastName();
         txtName.setText(teacherName);
         teacher_id = user.getId();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.d(TAG, "onStart");
 
         readDbClass(user);
         readDbBook(user);
@@ -102,12 +105,12 @@ public class TeacherClassActivity extends ActionBarActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId() == R.id.listView){
+        if (v.getId() == R.id.listView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menu.setHeaderTitle(classList.get(info.position).get(from[0]));
             String[] menuItems = getResources().getStringArray(R.array.teacher_class_context_array);
-            for (int i = 0; i<menuItems.length;i++){
-                menu.add(Menu.NONE,i,i,menuItems[i]);
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
             }
         }
     }
@@ -121,14 +124,14 @@ public class TeacherClassActivity extends ActionBarActivity {
         String class_name = classList.get(info.position).get(from[0]);
         String subject = classList.get(info.position).get(from[1]);
 
-        switch (menuItemName){
+        switch (menuItemName) {
             case "Neuer Eintrag":
                 // Launch EditClass activity
                 Intent intent = new Intent(TeacherClassActivity.this, EditBookActivity.class);
-                intent.putExtra("class_name",class_name);
-                intent.putExtra("subject",subject);
-                intent.putExtra("teacherName",teacherName);
-                intent.putExtra("teacher_id",teacher_id);
+                intent.putExtra("class_name", class_name);
+                intent.putExtra("subject", subject);
+                intent.putExtra("teacherName", teacherName);
+                intent.putExtra("teacher_id", teacher_id);
 
                 startActivity(intent);
                 break;
@@ -163,7 +166,7 @@ public class TeacherClassActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // Class data
+                        // class data
                         JSONArray classData = jObj.getJSONArray("class");
                         for (int i = 0; i < classData.length(); i++) {
                             JSONObject c = classData.getJSONObject(i);
@@ -175,7 +178,7 @@ public class TeacherClassActivity extends ActionBarActivity {
                             }
                         }
                     } else {
-                        // Error in login. Get the error message
+                        // Error in get all. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -194,12 +197,6 @@ public class TeacherClassActivity extends ActionBarActivity {
                 hideDialog();
             }
         }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-                return params;
-            }
         };
 
         // Adding request to request queue
@@ -216,7 +213,9 @@ public class TeacherClassActivity extends ActionBarActivity {
         pDialog.setMessage("Lese Einträge ...");
         showDialog();
 
-        String url = AppConfig.URL_BOOK_GET_ALL;
+        classList.clear();
+
+        String url = AppConfig.URL_BOOK_GET_SUBJECT_CLASS_BY_TEACHER;
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
@@ -232,35 +231,27 @@ public class TeacherClassActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // Class data
+                        // book data
                         JSONArray classData = jObj.getJSONArray("book");
                         for (int i = 0; i < classData.length(); i++) {
                             JSONObject c = classData.getJSONObject(i);
-                            int book_id = c.getInt("book_id");
-                            Date date = AppConfig.formatter.parse(c.getString("date"));
                             String subject = c.getString("subject");
-                            int teacher = c.getInt("teacher");
                             String class_name = c.getString("class");
-                            String info = c.getString("info");
 
-                            if (teacher == user.getId()) {
-                                HashMap<String, String> map = new HashMap();
-                                map.put(from[0], class_name);
-                                map.put(from[1], subject);
-                                classList.add(map);
-                            }
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put(from[0], class_name);
+                            map.put(from[1], subject);
+                            classList.add(map);
                         }
                         fillListView();
                     } else {
-                        // Error in login. Get the error message
+                        // Error in get all. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     // JSON error
-                    e.printStackTrace();
-                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
@@ -277,6 +268,7 @@ public class TeacherClassActivity extends ActionBarActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
+                params.put("teacher", user.getId().toString());
                 return params;
             }
         };

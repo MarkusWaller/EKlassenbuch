@@ -33,7 +33,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/teacher_label"
                     android:id="@+id/login_label"
-                    android:layout_marginRight="5dp" />
+                    android:layout_marginRight="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <Spinner
                     android:layout_width="wrap_content"
@@ -48,7 +49,8 @@
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/password"
@@ -57,7 +59,8 @@
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Button
                 android:id="@+id/email_sign_in_button"

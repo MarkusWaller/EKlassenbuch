@@ -30,7 +30,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/reg_teacher_label"
                     android:id="@+id/reg_label"
-                    android:layout_marginRight="5dp" />
+                    android:layout_marginRight="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <Spinner
                     android:layout_width="wrap_content"
@@ -44,7 +45,8 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:id="@+id/reg_email"
-                android:hint="@string/reg_email" />
+                android:hint="@string/reg_email"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -52,7 +54,8 @@
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/reg_last_name"
-                android:hint="@string/reg_last_name" />
+                android:hint="@string/reg_last_name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -60,7 +63,8 @@
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/reg_first_name"
-                android:hint="@string/reg_first_name" />
+                android:hint="@string/reg_first_name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -68,7 +72,8 @@
                 android:inputType="textPassword"
                 android:ems="10"
                 android:id="@+id/reg_password"
-                android:hint="@string/reg_password" />
+                android:hint="@string/reg_password"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -76,7 +81,8 @@
                 android:inputType="date"
                 android:ems="10"
                 android:id="@+id/reg_date"
-                android:hint="@string/reg_date" />
+                android:hint="@string/reg_date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -84,7 +90,8 @@
                 android:inputType="text"
                 android:ems="10"
                 android:id="@+id/reg_class"
-                android:hint="@string/reg_class" />
+                android:hint="@string/reg_class"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Button
                 android:layout_width="match_parent"

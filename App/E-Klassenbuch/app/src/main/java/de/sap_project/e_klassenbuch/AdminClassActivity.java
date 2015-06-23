@@ -160,7 +160,7 @@ public class AdminClassActivity extends ActionBarActivity {
                             String name = c.getString("name");
                             int h_teacher = c.getInt("h_teacher");
 
-                            HashMap<String, String> map = new HashMap();
+                            HashMap<String, String> map = new HashMap<>();
                             map.put(from[0], name);
                             map.put(from[1], teacherMap.get(h_teacher));
                             listMap.add(map);
@@ -287,13 +287,13 @@ public class AdminClassActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // user successfully registered
+                        // class successfully deleted
                         String successMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 successMsg, Toast.LENGTH_LONG).show();
                         readDbTeacher();
                     } else {
-                        // Error in registration. Get the error message
+                        // Error in delete. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -315,7 +315,7 @@ public class AdminClassActivity extends ActionBarActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to registration url
+                // Posting parameters to delete url
                 Map<String, String> params = new HashMap<>();
                 params.put("name", class_name);
                 return params;

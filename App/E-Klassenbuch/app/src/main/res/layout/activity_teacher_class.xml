@@ -13,8 +13,8 @@
         android:id="@+id/textViewTeachClassName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:textSize="20sp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,9 +24,9 @@
         android:layout_below="@+id/textViewTeachClassName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="15dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,21 +36,21 @@
         android:layout_alignTop="@+id/textViewHTeacherLabel"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:textSize="15dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fachlehrer"
         android:id="@+id/textView2"
-        android:textSize="15dp"
         android:layout_below="@+id/textViewHTeacherLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
         android:layout_width="wrap_content"

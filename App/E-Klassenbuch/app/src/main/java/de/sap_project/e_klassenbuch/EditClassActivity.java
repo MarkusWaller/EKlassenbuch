@@ -58,10 +58,10 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        List<String> list = new ArrayList<String>(teacherMap.values());
+        List<String> list = new ArrayList<>(teacherMap.values());
 
         hTeacherSpinner = (Spinner) findViewById((R.id.h_teacher_spinner));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_listview, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_listview, list);
         adapter.setDropDownViewResource(R.layout.simple_listview);
         hTeacherSpinner.setAdapter(adapter);
         hTeacherSpinner.setOnItemSelectedListener(this);
@@ -123,14 +123,14 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
 
                     // Check for error node in json
                     if (success == 1) {
-                        // user successfully registered
+                        // class successfully created / updated
                         String successMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 successMsg, Toast.LENGTH_LONG).show();
 
                         finish();
                     } else {
-                        // Error in registration. Get the error message
+                        // Error in creation / update. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -152,7 +152,7 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to registration url
+                // Posting parameters to create / update url
                 Map<String, String> params = new HashMap<>();
                 params.put("name", class_name);
                 params.put("h_teacher", h_teacher);

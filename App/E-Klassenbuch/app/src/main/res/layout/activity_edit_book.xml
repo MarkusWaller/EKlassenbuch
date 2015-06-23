@@ -21,18 +21,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tv_teacher"
-            android:textSize="18sp"
             android:layout_columnWeight="1"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/blank_text"
             android:id="@+id/teacher_book"
-            android:textSize="18sp"
             android:layout_columnWeight="1"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <LinearLayout
@@ -50,17 +50,42 @@
             android:layout_height="wrap_content"
             android:text="@string/label_subject"
             android:id="@+id/tv_subject"
-            android:textSize="18sp"
             android:layout_columnWeight="1"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/blank_text"
             android:id="@+id/subject_book"
-            android:textSize="18sp"
             android:layout_columnWeight="1"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_row_3"
+        android:layout_below="@+id/ll_row_2"
+        android:layout_margin="10dp"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_class"
+            android:id="@+id/tv_class"
+            android:layout_columnWeight="1"
+            android:layout_weight="2"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/class_spinner"
             android:layout_weight="1" />
     </LinearLayout>
 
@@ -69,9 +94,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="false"
-        android:id="@+id/ll_row_3"
+        android:id="@+id/ll_row_4"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/ll_row_2"
+        android:layout_below="@+id/ll_row_3"
         android:layout_margin="10dp">
 
         <TextView
@@ -79,9 +104,9 @@
             android:layout_height="wrap_content"
             android:text="@string/label_date"
             android:id="@+id/tv_date"
-            android:textSize="18sp"
             android:layout_columnWeight="1"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
             android:layout_width="match_parent"
@@ -89,9 +114,9 @@
             android:inputType="date"
             android:ems="10"
             android:id="@+id/datum_book"
-            android:textSize="18sp"
             android:layout_columnWeight="1"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <EditText
@@ -104,8 +129,9 @@
         android:layout_columnWeight="1"
         android:layout_above="@+id/button_book"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/ll_row_3"
-        android:layout_margin="10dp" />
+        android:layout_below="@+id/ll_row_4"
+        android:layout_margin="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:layout_width="wrap_content"

@@ -4,4 +4,5 @@
     <string name="blank_text">…</string>
     <string name="label_subject">Fach:</string>
     <string name="label_date">Datum:</string>
+    <string name="label_class">Klasse:</string>
 </resources>

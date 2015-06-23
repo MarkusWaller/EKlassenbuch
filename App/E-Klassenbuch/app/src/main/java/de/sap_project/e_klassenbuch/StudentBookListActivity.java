@@ -2,8 +2,8 @@ package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,11 +70,11 @@ public class StudentBookListActivity extends ActionBarActivity {
                 // Launch EditClass activity
                 Intent intent = new Intent(StudentBookListActivity.this, EditBookActivity.class);
                 intent.putExtra("date", date);
-                intent.putExtra("subject",subject);
-                intent.putExtra("teacherName",teacher);
-                intent.putExtra("class_name",class_name);
-                intent.putExtra("info",info);
-                intent.putExtra("view",true);
+                intent.putExtra("subject", subject);
+                intent.putExtra("teacherName", teacher);
+                intent.putExtra("class_name", class_name);
+                intent.putExtra("info", info);
+                intent.putExtra("view", true);
                 startActivity(intent);
             }
         });
@@ -99,7 +99,7 @@ public class StudentBookListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
             return true;
         }
 
@@ -132,7 +132,7 @@ public class StudentBookListActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // Class data
+                        // teacher data
                         JSONArray teacherData = jObj.getJSONArray("teacher");
                         for (int i = 0; i < teacherData.length(); i++) {
                             JSONObject c = teacherData.getJSONObject(i);
@@ -143,7 +143,7 @@ public class StudentBookListActivity extends ActionBarActivity {
                         }
                         readDbBook(user);
                     } else {
-                        // Error in login. Get the error message
+                        // Error in get all. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -194,7 +194,7 @@ public class StudentBookListActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // Class data
+                        // book data
                         JSONArray classData = jObj.getJSONArray("book");
                         for (int i = 0; i < classData.length(); i++) {
                             JSONObject c = classData.getJSONObject(i);
@@ -205,19 +205,17 @@ public class StudentBookListActivity extends ActionBarActivity {
                             String class_name = c.getString("class");
                             String info = c.getString("info");
 
-                            //if (teacher == user.getId()) {
-                                HashMap<String, String> map = new HashMap();
-                                map.put(from[0], AppConfig.formatter.format(date));
-                                map.put(from[1], subject);
-                                map.put(from[2], teacherMap.get(teacher));
-                                map.put(from[3], class_name);
-                                map.put(from[4], info);
-                                classList.add(map);
-                            //}
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put(from[0], AppConfig.formatter.format(date));
+                            map.put(from[1], subject);
+                            map.put(from[2], teacherMap.get(teacher));
+                            map.put(from[3], class_name);
+                            map.put(from[4], info);
+                            classList.add(map);
                         }
                         fillListView();
                     } else {
-                        // Error in login. Get the error message
+                        // Error in get by class. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();

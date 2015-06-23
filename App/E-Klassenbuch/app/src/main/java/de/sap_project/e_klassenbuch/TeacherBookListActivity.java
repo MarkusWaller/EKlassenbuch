@@ -2,8 +2,8 @@ package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -38,7 +38,7 @@ import de.sap_project.e_klassenbuch.db.SessionManager;
 
 public class TeacherBookListActivity extends ActionBarActivity {
     // LogCat tag
-    private static final String TAG = StudentBookListActivity.class.getSimpleName();
+    private static final String TAG = TeacherBookListActivity.class.getSimpleName();
 
     private SessionManager session;
     private ProgressDialog pDialog;
@@ -46,7 +46,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
     private User user;
     private HashMap<Integer, String> teacherMap = new HashMap<>();
     private List<HashMap<String, String>> bookList = new ArrayList<>();
-    private String[] from = new String[]{"col_1", "col_2", "col3", "class", "info","book_id"};
+    private String[] from = new String[]{"col_1", "col_2", "col3", "teacher", "info", "book_id"};
     private int[] to = new int[]{R.id.textViewCol1, R.id.textViewCol2, R.id.textViewCol3};
 
     @Override
@@ -59,28 +59,17 @@ public class TeacherBookListActivity extends ActionBarActivity {
         pDialog.setCancelable(false);
 
         listView = (ListView) findViewById(R.id.listViewTeacherBook);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String date = classList.get(position).get(from[0]);
-//                String subject = classList.get(position).get(from[1]);
-//                String teacher = classList.get(position).get(from[2]);
-//                String class_name = classList.get(position).get(from[3]);
-//                String info = classList.get(position).get(from[4]);
-//
-//                // Launch EditClass activity
-//                Intent intent = new Intent(TeacherBookListActivity.this, EditBookActivity.class);
-//                intent.putExtra("date", date);
-//                intent.putExtra("subject",subject);
-//                intent.putExtra("teacherName",teacher);
-//                intent.putExtra("class_name",class_name);
-//                intent.putExtra("info",info);
-//                intent.putExtra("view",true);
-//                startActivity(intent);
-//            }
-//        });
+
         session = SessionManager.getInstance();
         user = session.getUser();
+
+        Log.d(TAG, "onCreate()");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
 
         readDbTeacher();
     }
@@ -88,12 +77,12 @@ public class TeacherBookListActivity extends ActionBarActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId() == R.id.listViewTeacherBook){
+        if (v.getId() == R.id.listViewTeacherBook) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menu.setHeaderTitle(bookList.get(info.position).get(from[0]));
             String[] menuItems = getResources().getStringArray(R.array.teacher_book_context_array);
-            for (int i = 0; i<menuItems.length;i++){
-                menu.add(Menu.NONE,i,i,menuItems[i]);
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
             }
         }
     }
@@ -107,21 +96,21 @@ public class TeacherBookListActivity extends ActionBarActivity {
 
         String date = bookList.get(menuInfo.position).get(from[0]);
         String subject = bookList.get(menuInfo.position).get(from[1]);
-        String teacher = bookList.get(menuInfo.position).get(from[2]);
-        String class_name = bookList.get(menuInfo.position).get(from[3]);
+        String class_name = bookList.get(menuInfo.position).get(from[2]);
+        String teacher = bookList.get(menuInfo.position).get(from[3]);
         String info = bookList.get(menuInfo.position).get(from[4]);
         String book_id = bookList.get(menuInfo.position).get(from[5]);
 
-        switch (menuItemName){
+        switch (menuItemName) {
             case "Ansehen":
-                // Launch EditClass activity
+                // Launch EditBook activity
                 Intent intent = new Intent(TeacherBookListActivity.this, EditBookActivity.class);
                 intent.putExtra("date", date);
-                intent.putExtra("subject",subject);
-                intent.putExtra("teacherName",teacher);
-                intent.putExtra("class_name",class_name);
-                intent.putExtra("info",info);
-                intent.putExtra("view",true);
+                intent.putExtra("subject", subject);
+                intent.putExtra("teacherName", teacher);
+                intent.putExtra("class_name", class_name);
+                intent.putExtra("info", info);
+                intent.putExtra("view", true);
                 startActivity(intent);
                 break;
             case "Löschen":
@@ -131,12 +120,13 @@ public class TeacherBookListActivity extends ActionBarActivity {
                 // Launch EditBook activity
                 Intent intentEdit = new Intent(TeacherBookListActivity.this, EditBookActivity.class);
                 intentEdit.putExtra("date", date);
-                intentEdit.putExtra("subject",subject);
-                intentEdit.putExtra("teacherName",teacher);
-                intentEdit.putExtra("class_name",class_name);
+                intentEdit.putExtra("subject", subject);
+                intentEdit.putExtra("teacherName", teacher);
+                intentEdit.putExtra("class_name", class_name);
                 intentEdit.putExtra("book_id", book_id);
-                intentEdit.putExtra("info",info);
-                intentEdit.putExtra("edit",true);
+                intentEdit.putExtra("teacher_id", user.getId());
+                intentEdit.putExtra("info", info);
+                intentEdit.putExtra("edit", true);
                 startActivity(intentEdit);
                 break;
         }
@@ -164,13 +154,13 @@ public class TeacherBookListActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // user successfully registered
+                        // book successfully deleted
                         String successMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 successMsg, Toast.LENGTH_LONG).show();
                         readDbTeacher();
                     } else {
-                        // Error in registration. Get the error message
+                        // Error in delete. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -192,7 +182,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to registration url
+                // Posting parameters to delete url
                 Map<String, String> params = new HashMap<>();
                 params.put("book_id", book_id);
                 return params;
@@ -218,12 +208,13 @@ public class TeacherBookListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
     /**
      * read class table from db
      */
@@ -250,7 +241,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // Class data
+                        // teacher data
                         JSONArray teacherData = jObj.getJSONArray("teacher");
                         for (int i = 0; i < teacherData.length(); i++) {
                             JSONObject c = teacherData.getJSONObject(i);
@@ -261,7 +252,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
                         }
                         readDbBook(user);
                     } else {
-                        // Error in login. Get the error message
+                        // Error in get all. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -285,6 +276,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
     /**
      * read book table from db
      */
@@ -313,7 +305,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        // Class data
+                        // book data
                         JSONArray classData = jObj.getJSONArray("book");
                         for (int i = 0; i < classData.length(); i++) {
                             JSONObject c = classData.getJSONObject(i);
@@ -324,20 +316,18 @@ public class TeacherBookListActivity extends ActionBarActivity {
                             String class_name = c.getString("class");
                             String info = c.getString("info");
 
-                            //if (teacher == user.getId()) {
-                            HashMap<String, String> map = new HashMap();
+                            HashMap<String, String> map = new HashMap<>();
                             map.put(from[0], AppConfig.formatter.format(date));
                             map.put(from[1], subject);
-                            map.put(from[2], teacherMap.get(teacher));
-                            map.put(from[3], class_name);
+                            map.put(from[2], class_name);
+                            map.put(from[3], teacherMap.get(teacher));
                             map.put(from[4], info);
                             map.put(from[5], book_id.toString());
                             bookList.add(map);
-                            //}
                         }
                         fillListView();
                     } else {
-                        // Error in login. Get the error message
+                        // Error in get by teacher. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -360,7 +350,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to get by teacher url
                 Map<String, String> params = new HashMap<>();
                 params.put("teacher", user.getId().toString());
                 return params;
@@ -370,6 +360,7 @@ public class TeacherBookListActivity extends ActionBarActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
     /**
      * fill the data in the listview_two_column layout
      */
