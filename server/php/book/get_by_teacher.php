@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge der Tabelle "book" für eine Klasse.
+ * Der folgende Code liefert alle Einträge der Tabelle "book" für einen Lehrer.
  */
 
 // array for JSON response
@@ -14,11 +14,11 @@ require_once __DIR__ . '/../db_connect.php';
 $db = new DB_CONNECT();
 
 // check for post data
-if (isset($_POST["class"])) {
-    $class = $_POST['class'];
+if (isset($_POST["teacher"])) {
+    $teacher = $_POST['teacher'];
 
 // get all book from book table
-    $result = mysql_query("SELECT * FROM book WHERE class = '$class'") or die(mysql_error());
+    $result = mysql_query("SELECT * FROM book WHERE teacher = '$teacher'") or die(mysql_error());
 
 // check for empty result
     if (mysql_num_rows($result) > 0) {
