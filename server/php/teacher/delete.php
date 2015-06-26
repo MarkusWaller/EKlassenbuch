@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende code löscht ein Objekt aus der Tabelle "teacher".
+ * Der folgende code loescht ein Objekt aus der Tabelle "teacher".
  * Das Objekt ist definiert mit der id (teacher_id)
  */
 
@@ -25,7 +25,7 @@ if (isset($_POST['teacher_id'])) {
     if (mysql_affected_rows() > 0) {
         // successfully updated
         $response["success"] = 1;
-        $response["message"] = "Lehrer erfolgreich gelöscht.";
+        $response["message"] = "Lehrer erfolgreich geloescht.";
 
         // echoing JSON response
         echo json_encode($response);

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge der Tabelle "teacher" für eine E-Mail Adresse.
+ * Der folgende Code liefert alle Eintraege der Tabelle "teacher" fuer eine E-Mail Adresse.
  */
 
 // array for JSON response

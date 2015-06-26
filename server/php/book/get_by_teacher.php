@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge der Tabelle "book" für einen Lehrer.
+ * Der folgende Code liefert alle Eintraege der Tabelle "book" fuer einen Lehrer.
  */
 
 // array for JSON response

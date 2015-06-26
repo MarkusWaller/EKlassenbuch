@@ -32,7 +32,7 @@ if (isset($_POST['student_id']) && isset($_POST['first_name']) && isset($_POST['
     if ($result) {
         // successfully updated
         $response["success"] = 1;
-        $response["message"] = "Schüler erfolgreich aktualisiert.";
+        $response["message"] = "Schueler erfolgreich aktualisiert.";
 
         // echoing JSON response
         echo json_encode($response);

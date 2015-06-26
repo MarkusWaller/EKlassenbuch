@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge aus der Tabelle "class".
+ * Der folgende Code liefert alle Eintraege aus der Tabelle "class".
  */
 
 // array for JSON response

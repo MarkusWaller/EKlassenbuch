@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge aus der Tabelle "admin".
+ * Der folgende Code liefert alle Eintraege aus der Tabelle "admin".
  */
 
 // array for JSON response

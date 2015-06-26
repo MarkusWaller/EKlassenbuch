@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge aus der Tabelle "book".
+ * Der folgende Code liefert alle Eintraege aus der Tabelle "book".
  */
 
 // array for JSON response

@@ -31,7 +31,7 @@ if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['c
     if ($result) {
         // successfully inserted into database
         $response["success"] = 1;
-        $response["message"] = "Schüler erfolgreich angelegt.";
+        $response["message"] = "Schueler erfolgreich angelegt.";
 
         // echoing JSON response
         echo json_encode($response);

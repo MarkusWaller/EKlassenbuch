@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge der Tabelle "student" für eine E-Mail Adresse.
+ * Der folgende Code liefert alle Eintraege der Tabelle "student" fuer eine E-Mail Adresse.
  */
 
 // array for JSON response
@@ -48,7 +48,7 @@ if (isset($_POST["email"])) {
         } else {
             // no student found
             $response["success"] = 0;
-            $response["message"] = "Kein SchÃ¼ler oder noch nicht registriert.";
+            $response["message"] = "Kein Schueler oder noch nicht registriert.";
 
             // echo no users JSON
             echo json_encode($response);
@@ -56,7 +56,7 @@ if (isset($_POST["email"])) {
     } else {
         // no student found
         $response["success"] = 0;
-        $response["message"] = "Kein SchÃ¼ler oder noch nicht registriert.";
+        $response["message"] = "Kein Schueler oder noch nicht registriert.";
 
         // echo no users JSON
         echo json_encode($response);

@@ -49,7 +49,7 @@ if (isset($_GET["student_id"])) {
         } else {
             // no student found
             $response["success"] = 0;
-            $response["message"] = "Schüler nicht gefunden.";
+            $response["message"] = "Schueler nicht gefunden.";
 
             // echo no users JSON
             echo json_encode($response);
@@ -57,7 +57,7 @@ if (isset($_GET["student_id"])) {
     } else {
         // no student found
         $response["success"] = 0;
-        $response["message"] = "Schüler nicht gefunden.";
+        $response["message"] = "Schueler nicht gefunden.";
 
         // echo no users JSON
         echo json_encode($response);

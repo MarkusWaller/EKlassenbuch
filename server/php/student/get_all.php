@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Der folgende Code liefert alle Einträge aus der Tabelle "student".
+ * Der folgende Code liefert alle Eintraege aus der Tabelle "student".
  */
 
 // array for JSON response
@@ -44,7 +44,7 @@ if (mysql_num_rows($result) > 0) {
 } else {
     // no student found
     $response["success"] = 0;
-    $response["message"] = "Kein Schüler gefunden.";
+    $response["message"] = "Kein Schueler gefunden.";
 
     // echo no users JSON
     echo json_encode($response);

@@ -1,7 +1,7 @@
-﻿<?php
+<?php
 
 /*
- * Der folgende Code liefert die Einträge "subject", "class" der Tabelle "book" für einen Lehrer, ohne doppelte Einträge.
+ * Der folgende Code liefert die Eintraege "subject", "class" der Tabelle "book" fuer einen Lehrer, ohne doppelte Eintaege.
  */
 
 // array for JSON response
