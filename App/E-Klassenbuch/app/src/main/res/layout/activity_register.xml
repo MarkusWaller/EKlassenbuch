@@ -30,13 +30,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/reg_teacher_label"
                     android:id="@+id/reg_label"
-                    android:layout_marginRight="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_margin="5dp" />
 
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/spinner" />
+                    android:id="@+id/spinner"
+                    android:layout_margin="5dp" />
             </LinearLayout>
 
             <EditText
@@ -84,14 +85,25 @@
                 android:hint="@string/reg_date"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <EditText
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:ems="10"
-                android:id="@+id/reg_class"
-                android:hint="@string/reg_class"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reg_class_label"
+                    android:id="@+id/reg_class_label"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_margin="5dp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/reg_class_spinner"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
 
             <Button
                 android:layout_width="match_parent"

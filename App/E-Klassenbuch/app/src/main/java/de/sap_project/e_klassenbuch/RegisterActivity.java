@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,10 +19,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.sap_project.e_klassenbuch.data.SecureUtil;
@@ -36,13 +40,16 @@ import de.sap_project.e_klassenbuch.db.AppController;
 public class RegisterActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
     private static final String TAG = RegisterActivity.class.getSimpleName();
+    private List<String> classList = new ArrayList<>();
     private EditText regEmail;
     private EditText regPwd;
     private EditText regFirst;
     private EditText regLast;
     private EditText regDate;
-    private EditText regClass;
     private ProgressDialog pDialog;
+    private Spinner classSpinner;
+    private TextView classLabel;
+    private String class_name;
     private String url = AppConfig.URL_STUDENT_REGISTER;
 
     @Override
@@ -65,7 +72,9 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
         regLast = (EditText) findViewById(R.id.reg_last_name);
         regDate = (EditText) findViewById(R.id.reg_date);
         regPwd = (EditText) findViewById(R.id.reg_password);
-        regClass = (EditText) findViewById(R.id.reg_class);
+
+        classLabel = (TextView) findViewById((R.id.reg_class_label));
+        classSpinner = (Spinner) findViewById((R.id.reg_class_spinner));
 
         Button btnRegister = (Button) findViewById(R.id.button_register);
         Button btnLinkToLogin = (Button) findViewById(R.id.button_link_to_login);
@@ -77,8 +86,6 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
                 String first_name = regFirst.getText().toString();
                 String last_name = regLast.getText().toString();
                 String date = regDate.getText().toString();
-                String class_name = regClass.getText().toString();
-
 
                 // Check for empty data in the form
                 if (email.trim().length() > 0 && password.trim().length() > 0) {
@@ -101,6 +108,8 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
                 finish();
             }
         });
+
+        readDbClass();
     }
 
     private void register(final String email, final String password, final String first_name,
@@ -173,6 +182,75 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    /**
+     * read class table from db
+     */
+    private void readDbClass() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_readDbClass";
+
+        pDialog.setMessage("Lese Klassen ...");
+        showDialog();
+
+        classList.clear();
+
+        String url = AppConfig.URL_CLASS_GET_ALL;
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Class Response: " + response);
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    // Check for error node in json
+                    if (success == 1) {
+                        // Class data
+                        JSONArray classData = jObj.getJSONArray("class");
+                        for (int i = 0; i < classData.length(); i++) {
+                            JSONObject c = classData.getJSONObject(i);
+                            String name = c.getString("name");
+                            classList.add(name);
+                        }
+                        fillSpinnerList();
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    private void fillSpinnerList() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_listview, classList);
+        adapter.setDropDownViewResource(R.layout.simple_listview);
+        classSpinner.setAdapter(adapter);
+        classSpinner.setOnItemSelectedListener(this);
+    }
+
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -185,27 +263,36 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Object item = parent.getItemAtPosition(position);
+        Spinner spinner = (Spinner) parent;
 
-        if (item instanceof String) {
-            String s = (String) item;
-            switch (s) {
-                case "Schüler":
-                    url = AppConfig.URL_STUDENT_REGISTER;
-                    regDate.setVisibility(View.VISIBLE);
-                    regClass.setVisibility(View.VISIBLE);
-                    break;
-                case "Lehrer":
-                    url = AppConfig.URL_TEACHER_REGISTER;
-                    regDate.setVisibility(View.INVISIBLE);
-                    regClass.setVisibility(View.INVISIBLE);
-                    break;
-                case "Admin":
-                    url = AppConfig.URL_ADMIN_REGISTER;
-                    regDate.setVisibility(View.INVISIBLE);
-                    regClass.setVisibility(View.INVISIBLE);
-                    break;
+        if (spinner.getId() == R.id.spinner) {
+            Object item = parent.getItemAtPosition(position);
+
+            if (item instanceof String) {
+                String s = (String) item;
+                switch (s) {
+                    case "Schüler":
+                        url = AppConfig.URL_STUDENT_REGISTER;
+                        regDate.setVisibility(View.VISIBLE);
+                        classLabel.setVisibility(View.VISIBLE);
+                        classSpinner.setVisibility(View.VISIBLE);
+                        break;
+                    case "Lehrer":
+                        url = AppConfig.URL_TEACHER_REGISTER;
+                        regDate.setVisibility(View.INVISIBLE);
+                        classLabel.setVisibility(View.INVISIBLE);
+                        classSpinner.setVisibility(View.INVISIBLE);
+                        break;
+                    case "Admin":
+                        url = AppConfig.URL_ADMIN_REGISTER;
+                        regDate.setVisibility(View.INVISIBLE);
+                        classLabel.setVisibility(View.INVISIBLE);
+                        classSpinner.setVisibility(View.INVISIBLE);
+                        break;
+                }
             }
+        } else if (spinner.getId() == R.id.reg_class_spinner) {
+            class_name = parent.getItemAtPosition(position).toString();
         }
     }
 

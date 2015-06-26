@@ -208,7 +208,13 @@ public class TeacherBookListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
+        if (id == R.id.action_addBook) {
+            // Launch EditClass activity
+            Intent intent = new Intent(TeacherBookListActivity.this, EditBookActivity.class);
+            intent.putExtra("teacherName", user.getFirstName() + user.getLastName());
+            intent.putExtra("teacher_id", user.getId());
+
+            startActivity(intent);
             return true;
         }
 
