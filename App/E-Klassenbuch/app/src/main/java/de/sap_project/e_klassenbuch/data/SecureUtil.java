@@ -4,25 +4,39 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Security Utility
+ * Security Utility.
  * <p/>
  * Created by Markus on 03.05.2015.
  */
 
 public class SecureUtil {
-    // Singelton pattern
+    // Static object of this class -> singleton pattern.
     private static final SecureUtil SECURE_UTIL = new SecureUtil();
 
     private static final char[] hexadecimal = {'0', '1', '2', '3', '4', '5',
             '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
+    /**
+     * Private constructor -> singleton pattern.
+     */
     private SecureUtil() {
     }
 
+    /**
+     * Gets the instance of this class -> singleton pattern.
+     *
+     * @return The SecureUtil instance
+     */
     public static SecureUtil getInstance() {
         return SECURE_UTIL;
     }
 
+    /**
+     * Calculates the MD5 Hash-Code for the given password string.
+     *
+     * @param password The password string
+     * @return The MD5 Hash-Code
+     */
     public String getPasswordHash(String password) {
         String passwordHash = "";
         try {

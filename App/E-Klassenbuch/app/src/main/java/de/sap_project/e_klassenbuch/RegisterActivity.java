@@ -33,9 +33,9 @@ import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 
 /**
- * Register Activity
+ * Register Activity.
  * <p/>
- * Created by Markus
+ * Created by Markus on 28.04.2015.
  */
 public class RegisterActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
@@ -112,6 +112,19 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
         readDbClass();
     }
 
+    /**
+     * Adds the new user to the database table.
+     * For the selection of the correct database table (URL) see method onItemSelected.
+     *
+     * @see RegisterActivity#onItemSelected(AdapterView, View, int, long)
+     *
+     * @param email The email address of the user
+     * @param password The password of the user
+     * @param first_name The users first name
+     * @param last_name The users last name
+     * @param date The users birthdate (only for student)
+     * @param class_name The class name (only for student)
+     */
     private void register(final String email, final String password, final String first_name,
                           final String last_name, final String date, final String class_name) {
         // Tag used to cancel the request
@@ -183,7 +196,7 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
     }
 
     /**
-     * read class table from db
+     * Read 'class' table from database.
      */
     private void readDbClass() {
         // Tag used to cancel the request
@@ -244,6 +257,9 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    /**
+     * Fills the dropdown list with the class names.
+     */
     private void fillSpinnerList() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_listview, classList);
         adapter.setDropDownViewResource(R.layout.simple_listview);
@@ -251,11 +267,17 @@ public class RegisterActivity extends ActionBarActivity implements AdapterView.O
         classSpinner.setOnItemSelectedListener(this);
     }
 
+    /**
+     * Shows the message dialog.
+     */
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
+    /**
+     * Hides the message dialog.
+     */
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

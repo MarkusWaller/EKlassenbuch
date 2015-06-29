@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * Application configuration variables
+ * Application configuration variables.
  * <p/>
  * Created by Markus on 24.04.2015.
  */
@@ -15,13 +15,16 @@ public class AppConfig {
     // Server Student urls
     public static String URL_STUDENT_LOGIN = URL_PRAEFIX + "/student/get_by_email.php";
     public static String URL_STUDENT_REGISTER = URL_PRAEFIX + "/student/create.php";
+
     //Server Teacher urls
     public static String URL_TEACHER_LOGIN = URL_PRAEFIX + "/teacher/get_by_email.php";
     public static String URL_TEACHER_REGISTER = URL_PRAEFIX + "/teacher/create.php";
     public static String URL_TEACHER_GET_ALL = URL_PRAEFIX + "/teacher/get_all.php";
+
     //server admin urls
     public static String URL_ADMIN_LOGIN = URL_PRAEFIX + "/admin/get_by_email.php";
     public static String URL_ADMIN_REGISTER = URL_PRAEFIX + "/admin/create.php";
+
     //server class urls
     public static String URL_CLASS_GET_ALL = URL_PRAEFIX + "/class/get_all.php";
     public static String URL_CLASS_CREATE = URL_PRAEFIX + "/class/create.php";
@@ -40,6 +43,9 @@ public class AppConfig {
     // Date Format for Database
     public static final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
+    /**
+     * User types, admin, teacher or student.
+     */
     public enum UserType {
         STUDENT("Schüler"),
         TEACHER("Lehrer"),

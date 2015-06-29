@@ -10,7 +10,7 @@ import java.text.ParseException;
 import de.sap_project.e_klassenbuch.data.User;
 
 /**
- * notice the last login user
+ * Notice the last login user.
  * <p/>
  * Created by Markus on 24.04.2015.
  */
@@ -18,7 +18,7 @@ public class SessionManager {
     // LogCat tag
     private static String TAG = SessionManager.class.getSimpleName();
 
-    // Singleton pattern
+    // Static object of this class -> singleton pattern.
     private static final SessionManager SESSION_MANAGER = new SessionManager();
 
     // Shared Preferences
@@ -36,6 +36,9 @@ public class SessionManager {
 
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
 
+    /**
+     * Private constructor -> singleton pattern.
+     */
     private SessionManager() {
         Log.d(TAG, "SessionManager created as Singleton ...");
         this._context = AppController.getInstance().getApplicationContext();
@@ -43,10 +46,20 @@ public class SessionManager {
         editor = pref.edit();
     }
 
+    /**
+     * Gets the instance of this class -> singleton pattern.
+     *
+     * @return The SessionManager instance
+     */
     public static SessionManager getInstance() {
         return SESSION_MANAGER;
     }
 
+    /**
+     * Sets the login state.
+     *
+     * @param isLoggedIn {@code true} if the user is logged in
+     */
     public void setLogin(boolean isLoggedIn) {
 
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
@@ -57,10 +70,20 @@ public class SessionManager {
         Log.d(TAG, "User login session modified!");
     }
 
+    /**
+     * Gets the login state.
+     *
+     * @return {@code true} if the user is logged in
+     */
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
 
+    /**
+     * Gets the complete user data from the preferences file.
+     *
+     * @return The user object
+     */
     public User getUser() {
         if (user == null) {
             try {
@@ -79,6 +102,11 @@ public class SessionManager {
         return user;
     }
 
+    /**
+     * Save the complete user data to the preferences file.
+     *
+     * @param user The user object to save
+     */
     public void setUser(User user) {
         this.user = user;
 

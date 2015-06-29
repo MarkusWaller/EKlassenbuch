@@ -13,9 +13,9 @@ import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.SessionManager;
 
 /**
- * Main Activity
+ * Main Activity. Different layouts for the different user types.
  * <p/>
- * Created by Markus
+ * Created by Markus on 28.04.2015.
  */
 public class MainActivity extends ActionBarActivity {
 
@@ -64,22 +64,47 @@ public class MainActivity extends ActionBarActivity {
         txtEmail.setText(user.getEmail());
     }
 
+    /**
+     * Invoked if the class button is pressed, button is only visible in teacher layout.
+     * Starts the TeacherClassActivity.
+     *
+     * @param view The interface component
+     */
     public void onClickTeacher(View view) {
         Intent i = new Intent(getApplicationContext(), TeacherClassActivity.class);
         startActivity(i);
     }
 
+    /**
+     * Invoked if the class button is pressed, button is only visible in admin layout.
+     * Starts the AdminClassActivity.
+     *
+     * @param view The interface component
+     */
     public void onClickAdmin(View view) {
         Intent i = new Intent(getApplicationContext(), AdminClassActivity.class);
         startActivity(i);
     }
-    public void onClickStudentBook(View view){
-        Intent i = new Intent (getApplicationContext(),StudentBookListActivity.class);
+
+    /**
+     * Invoked if the student book button is pressed, button is only visible in student layout.
+     * Starts the StudentBookListActivity.
+     *
+     * @param view The interface component
+     */
+    public void onClickStudentBook(View view) {
+        Intent i = new Intent(getApplicationContext(), StudentBookListActivity.class);
         startActivity(i);
     }
 
-    public void onClickTeacherBook(View view){
-        Intent i = new Intent (getApplicationContext(),TeacherBookListActivity.class);
+    /**
+     * Invoked if the teacher book button is pressed, button is only visible in teacher layout.
+     * Starts the TeacherBookListActivity.
+     *
+     * @param view The interface component
+     */
+    public void onClickTeacherBook(View view) {
+        Intent i = new Intent(getApplicationContext(), TeacherBookListActivity.class);
         startActivity(i);
     }
 
@@ -107,8 +132,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Logging out the user. Will set isLoggedIn flag to false in shared
-     * preferences Clears the user data from sqlite users table
+     * Logging out the user. Will set isLoggedIn flag to false in shared preferences.
+     * Switch to the login activity.
      */
     private void logoutUser() {
         session.setLogin(false);

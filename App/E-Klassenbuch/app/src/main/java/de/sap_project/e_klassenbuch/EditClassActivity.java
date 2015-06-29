@@ -30,7 +30,11 @@ import java.util.Map;
 import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 
-
+/**
+ * Activity to view and edit an entry of the database table 'class'.
+ * <p/>
+ * Created by Markus on 03.06.2015.
+ */
 public class EditClassActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
     private static final String TAG = EditClassActivity.class.getSimpleName();
@@ -71,6 +75,7 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
 
         Button button = (Button) findViewById(R.id.edit_button);
 
+        // Settings for edit mode.
         if (edit) {
             final int position = adapter.getPosition(h_teacherName);
             hTeacherSpinner.post(new Runnable() {
@@ -86,6 +91,11 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         }
     }
 
+    /**
+     * Invoked if the create / update button is pressed.
+     *
+     * @param view The interface component
+     */
     public void onClickEditClass(View view) {
         String name = class_name.getText().toString();
 
@@ -99,6 +109,12 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         editClass(name, h_teacher_id);
     }
 
+    /**
+     * Creates / Updates the entry in the database table 'class'.
+     *
+     * @param class_name The name of the class
+     * @param h_teacher The headteacher
+     */
     private void editClass(final String class_name, final String h_teacher) {
         // Tag used to cancel the request
         String tag_string_req = "req_editClass";
@@ -186,11 +202,17 @@ public class EditClassActivity extends ActionBarActivity implements AdapterView.
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Shows the message dialog.
+     */
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
+    /**
+     * Hides the message dialog.
+     */
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

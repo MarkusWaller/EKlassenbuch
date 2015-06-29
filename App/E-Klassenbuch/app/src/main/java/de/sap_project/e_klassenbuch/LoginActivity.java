@@ -34,7 +34,7 @@ import de.sap_project.e_klassenbuch.db.AppController;
 import de.sap_project.e_klassenbuch.db.SessionManager;
 
 /**
- * Login User Activity
+ * Login User Activity.
  * <p/>
  * Created by Markus on 24.04.2015.
  */
@@ -109,7 +109,7 @@ public class LoginActivity extends ActionBarActivity implements AdapterView.OnIt
     }
 
     /**
-     * function to verify login details in mysql db
+     * Method to verify login details in database.
      */
     private void checkLogin(final String email, final String password) {
         // Tag used to cancel the request
@@ -213,11 +213,17 @@ public class LoginActivity extends ActionBarActivity implements AdapterView.OnIt
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    /**
+     * Shows the message dialog.
+     */
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
+    /**
+     * Hides the message dialog.
+     */
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

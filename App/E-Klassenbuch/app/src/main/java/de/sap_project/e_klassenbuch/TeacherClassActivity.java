@@ -34,7 +34,12 @@ import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 import de.sap_project.e_klassenbuch.db.SessionManager;
 
-
+/**
+ * Activity for user teacher, shows the class where the teacher is headteacher,
+ * lists the teachers classes and its possible to add a new book entry for the listed classes.
+ * <p/>
+ * Created by Markus on 03.06.2015.
+ */
 public class TeacherClassActivity extends ActionBarActivity {
     // LogCat tag
     private static final String TAG = TeacherClassActivity.class.getSimpleName();
@@ -72,7 +77,7 @@ public class TeacherClassActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
 
@@ -141,7 +146,9 @@ public class TeacherClassActivity extends ActionBarActivity {
     }
 
     /**
-     * read class table from db
+     * Read 'class' table from database.
+     *
+     * @param user The teacher
      */
     private void readDbClass(final User user) {
         // Tag used to cancel the request
@@ -204,7 +211,9 @@ public class TeacherClassActivity extends ActionBarActivity {
     }
 
     /**
-     * read book table from db
+     * Read 'book' table from database. Read only the fields subject and class without duplicates.
+     *
+     * @param user The teacher
      */
     private void readDbBook(final User user) {
         // Tag used to cancel the request
@@ -278,7 +287,7 @@ public class TeacherClassActivity extends ActionBarActivity {
     }
 
     /**
-     * fill the data in the listview_two_column layout
+     * Fill the data in the listview_two_column layout.
      */
     private void fillListView() {
         SimpleAdapter adapter = new SimpleAdapter(this, classList, R.layout.listview_two_column, from, to);
@@ -286,11 +295,17 @@ public class TeacherClassActivity extends ActionBarActivity {
         registerForContextMenu(listView);
     }
 
+    /**
+     * Shows the message dialog.
+     */
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
+    /**
+     * Hides the message dialog.
+     */
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

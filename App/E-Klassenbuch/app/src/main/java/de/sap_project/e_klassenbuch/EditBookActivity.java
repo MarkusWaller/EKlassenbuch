@@ -1,8 +1,8 @@
 package de.sap_project.e_klassenbuch;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +33,11 @@ import java.util.Map;
 import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 
-
+/**
+ * Activity to view and edit an entry of the database table 'book'.
+ * <p/>
+ * Created by Markus on 10.06.2015.
+ */
 public class EditBookActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
     private static final String TAG = EditBookActivity.class.getSimpleName();
@@ -88,6 +92,7 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
 
         button_book = (Button) findViewById(R.id.button_book);
 
+        // Settings for read only mode.
         if (view) {
             subjectView.setEnabled(false);
             subjectView.setTextColor(teacherView.getCurrentTextColor());
@@ -98,6 +103,7 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
             infoView.setTextColor(teacherView.getCurrentTextColor());
             button_book.setVisibility(View.INVISIBLE);
         }
+        // Settings for edit mode.
         if (edit) {
             button_book.setText("Ändern");
         }
@@ -105,6 +111,11 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
         readDbClass();
     }
 
+    /**
+     * Invoked if the create / update button is pressed.
+     *
+     * @param view The interface component
+     */
     public void onClickEditBook(View view) {
         subject = subjectView.getText().toString();
         String date = datumView.getText().toString();
@@ -113,6 +124,15 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
         editBook(date, subject, teacher_id.toString(), class_name, info);
     }
 
+    /**
+     * Creates / Updates the entry in the database table 'book'.
+     *
+     * @param date       The date of the entry
+     * @param subject    The subject
+     * @param teacher    The teacher id
+     * @param class_name The class name
+     * @param info       The info of the entry
+     */
     private void editBook(final String date, final String subject, final String teacher, final String class_name, final String info) {
         // Tag used to cancel the request
         String tag_string_req = "req_editBook";
@@ -169,8 +189,8 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
             protected Map<String, String> getParams() {
                 // Posting parameters to create / update url
                 Map<String, String> params = new HashMap<>();
-                if (edit){
-                    params.put("book_id",book_id);
+                if (edit) {
+                    params.put("book_id", book_id);
                 }
                 params.put("date", date);
                 params.put("subject", subject);
@@ -186,7 +206,7 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
     }
 
     /**
-     * read class table from db
+     * Read table 'class' from the database.
      */
     private void readDbClass() {
         // Tag used to cancel the request
@@ -247,6 +267,9 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    /**
+     * Fills the dropdown list with the class names.
+     */
     private void fillSpinnerList() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_listview, classList);
         adapter.setDropDownViewResource(R.layout.simple_listview);
@@ -285,11 +308,17 @@ public class EditBookActivity extends ActionBarActivity implements AdapterView.O
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Shows the message dialog.
+     */
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
+    /**
+     * Hides the message dialog.
+     */
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

@@ -31,7 +31,11 @@ import java.util.Map;
 import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 
-
+/**
+ * Activity for user admin to add, change and delete classes.
+ *
+ * Created by Markus on 03.06.2015.
+ */
 public class AdminClassActivity extends ActionBarActivity {
     // LogCat tag
     private static final String TAG = AdminClassActivity.class.getSimpleName();
@@ -56,7 +60,7 @@ public class AdminClassActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
 
@@ -64,7 +68,7 @@ public class AdminClassActivity extends ActionBarActivity {
     }
 
     /**
-     * read class table from db
+     * Read 'teacher' table from database.
      */
     private void readDbTeacher() {
         // Tag used to cancel the request
@@ -126,7 +130,7 @@ public class AdminClassActivity extends ActionBarActivity {
     }
 
     /**
-     * read class table from db
+     * Read 'class' table from database.
      */
     private void readDbClass() {
         // Tag used to cancel the request
@@ -193,7 +197,7 @@ public class AdminClassActivity extends ActionBarActivity {
     }
 
     /**
-     * fill the data in the listview_two_column layout
+     * Fill the data in the listview_two_column layout.
      */
     private void fillListView() {
         SimpleAdapter adapter = new SimpleAdapter(this, listMap, R.layout.listview_two_column, from, to);
@@ -204,12 +208,12 @@ public class AdminClassActivity extends ActionBarActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId() == R.id.listViewAdminClass){
+        if (v.getId() == R.id.listViewAdminClass) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menu.setHeaderTitle(listMap.get(info.position).get(from[0]));
             String[] menuItems = getResources().getStringArray(R.array.admin_class_context_array);
-            for (int i = 0; i<menuItems.length;i++){
-                menu.add(Menu.NONE,i,i,menuItems[i]);
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
             }
         }
     }
@@ -223,7 +227,7 @@ public class AdminClassActivity extends ActionBarActivity {
         String className = listMap.get(info.position).get(from[0]);
         String h_teacherName = listMap.get(info.position).get(from[1]);
 
-        switch (menuItemName){
+        switch (menuItemName) {
             case "Löschen":
                 deleteClass(className);
                 break;
@@ -231,9 +235,9 @@ public class AdminClassActivity extends ActionBarActivity {
                 // Launch EditClass activity
                 Intent intent = new Intent(AdminClassActivity.this, EditClassActivity.class);
                 intent.putExtra("teacherMap", teacherMap);
-                intent.putExtra("className",className);
-                intent.putExtra("h_teacherName",h_teacherName);
-                intent.putExtra("edit",true);
+                intent.putExtra("className", className);
+                intent.putExtra("h_teacherName", h_teacherName);
+                intent.putExtra("edit", true);
                 startActivity(intent);
                 break;
         }
@@ -266,6 +270,11 @@ public class AdminClassActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Delete the given class from the table 'class' in the database.
+     *
+     * @param class_name Name of the class to delete
+     */
     private void deleteClass(final String class_name) {
         // Tag used to cancel the request
         String tag_string_req = "req_deleteClass";
@@ -325,11 +334,18 @@ public class AdminClassActivity extends ActionBarActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
+    /**
+     * Shows the message dialog.
+     */
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
+    /**
+     * Hides the message dialog.
+     */
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

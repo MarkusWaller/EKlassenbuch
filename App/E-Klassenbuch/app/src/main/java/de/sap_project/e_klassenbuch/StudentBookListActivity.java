@@ -39,7 +39,11 @@ import de.sap_project.e_klassenbuch.db.AppConfig;
 import de.sap_project.e_klassenbuch.db.AppController;
 import de.sap_project.e_klassenbuch.db.SessionManager;
 
-
+/**
+ *  Activity for user student to view book entries. Only entries with the students class are shown.
+ *
+ * Created by Markus on 18.06.2015.
+ */
 public class StudentBookListActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     // LogCat tag
     private static final String TAG = StudentBookListActivity.class.getSimpleName();
@@ -118,7 +122,7 @@ public class StudentBookListActivity extends ActionBarActivity implements Adapte
     }
 
     /**
-     * read class table from db
+     *  Read 'teacher' table from database.
      */
     private void readDbTeacher() {
         // Tag used to cancel the request
@@ -180,7 +184,7 @@ public class StudentBookListActivity extends ActionBarActivity implements Adapte
     }
 
     /**
-     * read book table from db
+     *  Read 'book' table from database, only entries with users (students) class.
      */
     private void readDbBook(final User user) {
         // Tag used to cancel the request
@@ -265,7 +269,7 @@ public class StudentBookListActivity extends ActionBarActivity implements Adapte
     }
 
     /**
-     * fill the data in the listview_three_column layout
+     * Fill the data in the listview_three_column layout.
      */
     private void fillListView() {
         SimpleAdapter adapter = new SimpleAdapter(this, bookList, R.layout.listview_three_column, from, to);
@@ -274,7 +278,7 @@ public class StudentBookListActivity extends ActionBarActivity implements Adapte
     }
 
     /**
-     * fill the filtered data in the listview_three_column layout
+     * Fill the filtered data in the listview_three_column layout.
      */
     private void fillListViewFiltered(String subjectFilter) {
         // Clear filtered List
@@ -294,6 +298,9 @@ public class StudentBookListActivity extends ActionBarActivity implements Adapte
         registerForContextMenu(listView);
     }
 
+    /**
+     * Fills the dropdown list with the subject names or "Alle".
+     */
     private void fillSpinnerList() {
         List<String> list = new ArrayList<>();
         list.add("Alle");
@@ -304,11 +311,17 @@ public class StudentBookListActivity extends ActionBarActivity implements Adapte
         filterSubjectSpinner.setOnItemSelectedListener(this);
     }
 
+    /**
+     * Shows the message dialog.
+     */
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
+    /**
+     * Hides the message dialog.
+     */
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

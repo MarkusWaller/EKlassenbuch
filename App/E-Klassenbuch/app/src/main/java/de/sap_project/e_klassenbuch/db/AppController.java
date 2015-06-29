@@ -8,7 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 /**
- * http request to URLs
+ * HTTP request to URLs.
  * <p/>
  * Created by Markus on 24.04.2015.
  */
